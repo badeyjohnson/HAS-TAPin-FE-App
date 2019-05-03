@@ -15,7 +15,7 @@ https://github.com/badeyjohnson/HAS-TAPin-BE
 
 ## User story - Risk assessment
 
-MVP
+MVP  
 As a surveyor I should be able to log in.
 As a surveyor I should be able to select a site i have previously visited before
 As a surveyor I should be able to set up a new site if it has not been visited before
