@@ -2,25 +2,7 @@ import React from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; // Version can be specified in package.json
 import SignInScreen from './screens/SignInScreen'
-
-class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Home',
-  };
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
-        <Button
-          title="Go to sign in"
-          onPress={() => this.props.navigation.navigate('SignIn')}
-        />
-      </View>
-    );
-  }
-}
-
-
+import HomeScreen from './screens/HomeScreen'
 
 const RootStack = createStackNavigator(
   {
@@ -43,11 +25,11 @@ const RootStack = createStackNavigator(
   }
 );
 
-const AppContainer = createAppContainer(RootStack);
+const AppNavigator = createAppContainer(RootStack);
 
 export default class App extends React.Component {
   render() {
-    return <AppContainer />;
+    return <AppNavigator />;
   }
 }
 
