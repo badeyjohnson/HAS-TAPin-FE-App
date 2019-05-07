@@ -1,17 +1,17 @@
 import React from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 
-export default class HomeScreen extends React.Component {
+export default class JobsScreen extends React.Component {
     static navigationOptions = {
-      title: 'Home',
+      title: 'Job',
     };
     render() {
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text>Home Screen</Text>
+          <Text>Job Screen</Text>
           <Button
-            title="Go to job"
-            onPress={() => this.props.navigation.navigate('Job')}
+            title="Go to SSRAs"
+            onPress={() => this.props.navigation.navigate('SSRA')}
           />
         </View>
       );
