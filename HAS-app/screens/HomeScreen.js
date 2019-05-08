@@ -1,5 +1,12 @@
 import React from 'react';
-import { Button, View, Text, StyleSheet, TextInput } from 'react-native';
+import {
+  Button,
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
+import ListView from '../components/ListView';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -13,7 +20,12 @@ export default class HomeScreen extends React.Component {
   }
   state = {
     jobNumber: '',
-    addJob: false
+    addJob: false,
+    jobs:[
+      { jNum: '11111', jName: 'big metal one' },
+      { jNum: '22222', jName: 'small bamboo one' },
+      { jNum: '33333', jName: 'medium duck egg blue one' }
+    ]
   };
   handleAddJob = () => {
     this.setState({ addJob: true });
@@ -24,21 +36,26 @@ export default class HomeScreen extends React.Component {
 
   handleAddJobSubmit = () => {
     this.setState({ addJob: false });
-  }
+  };
+
   render() {
     const { navigation } = this.props;
     const email = navigation.getParam('email', '');
     return !this.state.addJob ? (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
-        <Text>user email: {JSON.stringify(email)}</Text>
-        <Text>job number: {this.state.jobNumber}</Text>
-        <Button
-          title="Go to job"
-          onPress={() => this.props.navigation.navigate('Job')}
-        />
+        <Text>Anything please</Text>
+        <ListView itemList={this.state.jobs} />
       </View>
     ) : (
+      //   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      //     {/* <Text>Home Screen</Text>
+      //     <Text>user email: {JSON.stringify(email)}</Text>
+      //     <Text>job number: {this.state.jobNumber}</Text>
+      //     <Button
+      //       title="Go to job"
+      //       onPress={() => this.props.navigation.navigate('Job')}
+      //     /> */}
+      //   </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Find a job</Text>
         <TextInput
@@ -47,26 +64,19 @@ export default class HomeScreen extends React.Component {
           style={styles.input}
           onChangeText={this.handleJobNumber}
         />
-        <Button
-          title="Submit"
-          onPress={this.handleAddJobSubmit}
-        />
+        <Button title="Submit" onPress={this.handleAddJobSubmit} />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   input: {
     margin: 15,
     height: 40,
     width: 200,
     borderColor: '#7a42f4',
     borderWidth: 1
-  }
+  },
+
 });
