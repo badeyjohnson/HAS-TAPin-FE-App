@@ -64,6 +64,7 @@ export default class HomeScreen extends React.Component {
         <ListView
           itemList={this.state.jobs}
           navigation={this.props.navigation}
+          parent='Home'
         />
       </View>
     ) : (

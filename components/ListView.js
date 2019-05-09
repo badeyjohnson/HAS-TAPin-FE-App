@@ -9,18 +9,28 @@ const styles = StyleSheet.create({
   }
 });
 
-const ListView = ({ itemList, navigation }) => (
+const ListView = ({ itemList, navigation, parent }) => (
   <View style={styles.container}>
     <FlatList
       data={itemList}
-      renderItem={({ item }) => (
-        <ListRow
-          title={item.jNum}
-          description={item.jName}
-          navigation={navigation}
-        />
-      )}
-      keyExtractor={item => item.jNum}
+      renderItem={({ item }) =>
+        item.jNum ? (
+          <ListRow
+            title={item.jNum}
+            description={item.jName}
+            navigation={navigation}
+            parent={parent}
+          />
+        ) : (
+          <ListRow
+            title={item.riskId}
+            description={item.createdAt}
+            navigation={navigation}
+            parent={parent}
+          />
+        )
+      }
+      keyExtractor={item => item.jNum? item.jNum : item.riskId}
     />
   </View>
 );
