@@ -38,9 +38,9 @@ export default class SignInScreen extends React.Component {
   };
 
   login = () => {
-    const { email, password } = this.state;
+    const { email, password, isEmailValid, isPasswordValid } = this.state;
     this.setState({ isLoading: true });
-    // Simulate an API call
+    // API call
     setTimeout(() => {
       LayoutAnimation.easeInEaseOut();
       this.setState({
@@ -50,6 +50,10 @@ export default class SignInScreen extends React.Component {
           this.validatePassword(password) || this.passwordInput.shake()
       });
     }, 1500);
+    console.log(isEmailValid, isPasswordValid);
+    if (isEmailValid && isPasswordValid) {
+      this.props.navigation.navigate('Home', this.state);
+    }
   };
 
   validateEmail = email => {
