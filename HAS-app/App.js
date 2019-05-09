@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; // Version can be specified in package.json
-import SignInScreen from './screens/SignInScreen'
-import HomeScreen from './screens/HomeScreen'
-import JobScreen from './screens/JobScreen'
-import SSRAScreen from './screens/SSRAScreen'
-import MapScreen from './screens/MapScreen'
-import SubmitScreen from './screens/SubmitScreen'
+import SignInScreen from './screens/SignInScreen';
+import HomeScreen from './screens/HomeScreen';
+import JobScreen from './screens/JobScreen';
+import SSRAScreen from './screens/SSRAScreen';
+import MapScreen from './screens/MapScreen';
+import SubmitScreen from './screens/SubmitScreen';
 
 const RootStack = createStackNavigator(
   {
@@ -15,20 +15,20 @@ const RootStack = createStackNavigator(
     Job: JobScreen,
     SSRA: SSRAScreen,
     Map: MapScreen,
-    Submit: SubmitScreen,
+    Submit: SubmitScreen
   },
   {
-    initialRouteName: 'SignIn',
+    initialRouteName: 'Home',
 
     // sets the default header styling for all routes
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#f4511e',
+        backgroundColor: '#f4511e'
       },
       headerTintColor: '#fff',
       headerTitleStyle: {
-        fontWeight: 'bold',
-      },
+        fontWeight: 'bold'
+      }
     }
   }
 );
@@ -45,6 +45,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });
