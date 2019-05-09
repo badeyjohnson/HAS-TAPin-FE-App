@@ -5,14 +5,22 @@ import {
   Text,
   StyleSheet,
   TextInput,
+  TouchableHighlight
 } from 'react-native';
 import ListView from '../components/ListView';
+import AddIcon from '../components/AddIcon';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: navigation.getParam('email', ''),
-      headerRight: <Button onPress={navigation.getParam('addJob')} title="+" />
+      headerRight: (
+        <TouchableHighlight onPress={navigation.getParam('addJob')}>
+          <View>
+            <AddIcon onPress={navigation.getParam('addJob')} />
+          </View>
+        </TouchableHighlight>
+      )
     };
   };
   componentDidMount() {
@@ -21,10 +29,20 @@ export default class HomeScreen extends React.Component {
   state = {
     jobNumber: '',
     addJob: false,
-    jobs:[
+    jobs: [
       { jNum: '11111', jName: 'big metal one' },
       { jNum: '22222', jName: 'small bamboo one' },
-      { jNum: '33333', jName: 'medium duck egg blue one' }
+      { jNum: '33333', jName: 'medium duck egg blue one' },
+      { jNum: '33453', jName: 'medium duck egg blue one' },
+      { jNum: '35553', jName: 'medium duck egg blue one' },
+      { jNum: '66666', jName: 'medium duck egg blue one' },
+      { jNum: '77777', jName: 'medium duck egg blue one' },
+      { jNum: '88888', jName: 'medium duck egg blue one' },
+      { jNum: '99999', jName: 'medium duck egg blue one' },
+      { jNum: '00000', jName: 'medium duck egg blue one' },
+      { jNum: '45678', jName: 'medium duck egg blue one' },
+      { jNum: '12345', jName: 'medium duck egg blue one' },
+      { jNum: '98765', jName: 'medium duck egg blue one' }
     ]
   };
   handleAddJob = () => {
@@ -43,19 +61,12 @@ export default class HomeScreen extends React.Component {
     const email = navigation.getParam('email', '');
     return !this.state.addJob ? (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Anything please</Text>
-        <ListView itemList={this.state.jobs} />
+        <ListView
+          itemList={this.state.jobs}
+          navigation={this.props.navigation}
+        />
       </View>
     ) : (
-      //   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      //     {/* <Text>Home Screen</Text>
-      //     <Text>user email: {JSON.stringify(email)}</Text>
-      //     <Text>job number: {this.state.jobNumber}</Text>
-      //     <Button
-      //       title="Go to job"
-      //       onPress={() => this.props.navigation.navigate('Job')}
-      //     /> */}
-      //   </View>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Find a job</Text>
         <TextInput
@@ -77,6 +88,5 @@ const styles = StyleSheet.create({
     width: 200,
     borderColor: '#7a42f4',
     borderWidth: 1
-  },
-
+  }
 });
