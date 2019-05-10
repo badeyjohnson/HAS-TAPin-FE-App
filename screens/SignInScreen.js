@@ -43,16 +43,20 @@ export default class SignInScreen extends React.Component {
     // API call
     setTimeout(() => {
       LayoutAnimation.easeInEaseOut();
-      this.setState({
-        isLoading: false,
-        isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
-        isPasswordValid:
-          this.validatePassword(password) || this.passwordInput.shake()
-      });
+      this.setState(
+        {
+          isLoading: false,
+          isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
+          isPasswordValid:
+            this.validatePassword(password) || this.passwordInput.shake()
+        },
+        () => {
+          if (isEmailValid && isPasswordValid) {
+            this.props.navigation.navigate('Home', this.state);
+          }
+        }
+      );
     }, 1500);
-    if (isEmailValid && isPasswordValid) {
-      this.props.navigation.navigate('Home', this.state);
-    }
   };
 
   validateEmail = email => {
@@ -132,7 +136,12 @@ export default class SignInScreen extends React.Component {
                   />
                 }
                 containerStyle={{ marginVertical: 10 }}
-                onChangeText={password => this.setState({ password })}
+                onChangeText={password =>
+                  this.setState({
+                    password,
+                    isPasswordValid: this.validatePassword(password)
+                  })
+                }
                 value={password}
                 inputStyle={{ marginLeft: 10, color: 'black' }}
                 secureTextEntry={true}
@@ -152,7 +161,7 @@ export default class SignInScreen extends React.Component {
                   fontWeight: 'bold'
                 }}
                 errorMessage={
-                  isEmailValid ? null : 'Please enter a valid password'
+                  isPasswordValid ? null : 'Please enter a valid password'
                 }
               />
             </View>
@@ -163,7 +172,7 @@ export default class SignInScreen extends React.Component {
               onPress={this.login}
               loading={isLoading}
               loadingProps={{ size: 'small', color: 'white' }}
-              disabled={!isEmailValid && !isPasswordValid}
+              // disabled={!isEmailValid}
               buttonStyle={{
                 height: 50,
                 width: 250,

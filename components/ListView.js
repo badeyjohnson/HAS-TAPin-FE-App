@@ -6,7 +6,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.97,
+    // flex: 1,
     width: SCREEN_WIDTH,
     // backgroundColor: 'blue'
   }

@@ -15,8 +15,6 @@ import {
   Avatar,
   ThemeProvider
 } from 'react-native-elements';
-const faker = require('faker');
-const image = faker.image.city();
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -61,21 +59,7 @@ const theme = {
 };
 
 const ListRow = ({ title, description, navigation }) => (
-  <ThemeProvider theme={theme}>
-    <Card image={require('../images/building.jpg')} style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.text}>{description}</Text>
-      <Button
-        buttonStyle={{
-          borderRadius: 10,
-          marginLeft: 0,
-          marginRight: 0,
-          marginBottom: 0
-        }}
-        title="More"
-      />
-    </Card>
-  </ThemeProvider>
+  <Card title={title} description={description} />
 );
 
 export default ListRow;
