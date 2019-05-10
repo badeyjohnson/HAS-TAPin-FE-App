@@ -16,9 +16,10 @@ export default class MapScreen extends React.Component {
       { latitude: 53.788328, longitude: -1.558051 }
     ],
     checkedIn: false,
-    failedCheckIn: false
+    failedCheckIn: false,
+    checkedOut: false
   };
-  textNumber = () => {
+  textNumberCheckIn = () => {
     if (!this.state.checkedIn) {
       Communications.text(
         '07846946661',
@@ -29,6 +30,12 @@ export default class MapScreen extends React.Component {
       this.setState({ failedCheckIn: true });
     }
   };
+
+  textNumberCheckOut = () => {
+    Communications.text('07846946661', 'Job done #TishsAngels');
+    this.setState({ checkedOut: true });
+  };
+
   resetFailedCheckIn = () => {
     this.setState({ failedCheckIn: false });
   };
@@ -38,7 +45,7 @@ export default class MapScreen extends React.Component {
   };
 
   render() {
-    return (
+    return !this.state.checkedOut ? (
       <View style={styles.container}>
         <MapView
           style={{ alignSelf: 'stretch', flex: 0.8 }}
@@ -68,24 +75,42 @@ export default class MapScreen extends React.Component {
         </MapView>
         <View style={{ flex: 0.2 }}>
           {!this.state.failedCheckIn ? (
-            <Button
-              onPress={this.textNumber}
-              title="On Site"
-              color="#841584"
-              accessibilityLabel="Learn more about this purple button"
-            />
+            <View>
+              <Button
+                onPress={this.textNumberCheckIn}
+                title="On Site"
+                color="#841584"
+                accessibilityLabel="Learn more about this purple button"
+              />
+              <Button
+                onPress={this.textNumberCheckOut}
+                title="Off Site"
+                color="#841584"
+                accessibilityLabel="Learn more about this purple button"
+              />
+            </View>
           ) : (
             <View>
               <Text>You have already checked in</Text>
-              <TouchableOpacity onPress={this.resetFailedCheckIn}>
+              <TouchableOpacity onPress={()=> this.resetFailedCheckIn}>
                 <Text>OK</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={this.resetCheckedIn}>
+              <TouchableOpacity onPress={()=>this.resetCheckedIn}>
                 <Text>Re-check in</Text>
               </TouchableOpacity>
             </View>
           )}
         </View>
+      </View>
+    ) : (
+      <View style={styles.container}>
+        <Text>You have checked out. Did you come across anything that needs to be added to the risk assessment?</Text>
+        <TouchableOpacity onPress={()=>this.props.navigation.navigate('SSRA')}>
+          <Text>Yes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>this.props.navigation.navigate('Submit')}>
+          <Text>No</Text>
+        </TouchableOpacity>
       </View>
     );
   }
