@@ -5,6 +5,7 @@ import ListRow from './ListRow';
 const styles = StyleSheet.create({
   container: {
     flex: 0.9,
+    borderWidth:1,
     marginLeft: 0
   }
 });
