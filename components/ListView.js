@@ -23,7 +23,7 @@ const ListView = ({ itemList, navigation, parent }) => (
         renderItem={({ item }) => (
           <RiskCard item={item} navigation={navigation} />
         )}
-        keyExtractor={item => item.jNum}
+        keyExtractor={item => item.siteId}
       />
     ) : (
       <FlatList

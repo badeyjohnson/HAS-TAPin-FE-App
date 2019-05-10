@@ -1,20 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Dimensions } from 'react-native';
+import { Dimensions, TouchableOpacity } from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const Card = ({ item }) => (
+const Card = ({ item, navigation }) => (
   <Container>
+    <TouchableOpacity onPress={() => navigation.navigate('SSRA', '')}>
     <Content>
       <Titlebar>
         <Avatar source={require('../images/avatar.png')} />
-        <Title>Welcome back,</Title>
-        <Name>
-          Created by:{item.createdAt}, Created at:{item.createdBy}
-        </Name>
+        <Title>Site Specfic Risk Register</Title>
+        <Caption>Created at:{item.createdAt}</Caption>
+        <Caption>Created by:{item.createdBy}</Caption>
       </Titlebar>
     </Content>
+    </TouchableOpacity>
   </Container>
 );
 
@@ -22,7 +23,7 @@ export default Card;
 
 const Container = styled.View`
   background: #fff;
-  height: 115px;
+  height: 100px;
   width: ${SCREEN_WIDTH - 50};
   border-radius: 14px;
   margin: 18px;
@@ -31,20 +32,23 @@ const Container = styled.View`
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   align-items: center;
   align-content: center;
+  
 `;
 
 const Content = styled.View`
   padding-top: 10px;
+  padding-bottom: 10px;
   flex-direction: column;
-  align-items: center;
-  height: 60px;
+  margin-bottom: 10px;
+  height: 100px;
+  overflow: hidden;
 `;
 
-// const Title = styled.Text`
-//   color: #3c4560;
-//   font-size: 20px;
-//   font-weight: 600;
-// `;
+const Title = styled.Text`
+  color: #3c4560;
+  font-size: 15px;
+  font-weight: 600;
+`;
 
 const Titlebar = styled.View`
   width: 100%;
@@ -55,11 +59,11 @@ const Titlebar = styled.View`
 `;
 
 const Avatar = styled.Image`
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   background: black;
   border-radius: 22px;
-  margin-left: 20px;
+  margin-left: 10px;
   position: absolute;
   top: 0;
   left: 0;
@@ -69,4 +73,11 @@ const Name = styled.Text`
   font-size: 20px;
   color: #3c4560;
   font-weight: bold;
+`;
+
+const Caption = styled.Text`
+  color: #b8b3c3;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 4px;
 `;
