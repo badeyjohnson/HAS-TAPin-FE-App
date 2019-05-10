@@ -18,10 +18,13 @@ const RootStack = createStackNavigator(
     Submit: SubmitScreen
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Job',
 
     // sets the default header styling for all routes
     defaultNavigationOptions: {
+      headerBackTitleStyle: {
+        fontWeight: 'bold'
+      },
       headerStyle: {
         backgroundColor: '#696eb4'
       },
