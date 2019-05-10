@@ -1,9 +1,18 @@
 import React from 'react';
-import { Button, View, Text, StyleSheet, Dimensions } from 'react-native';
+import {
+  Button,
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  FlatList
+} from 'react-native';
 import ListView from '../components/ListView';
 import Carousel from 'react-native-sideswipe';
+import JobContent from '../components/JobContentCard';
+import styled from 'styled-components';
 
-const { width } = Dimensions.get('window');
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class JobsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -12,69 +21,103 @@ export default class JobsScreen extends React.Component {
     };
   };
   state = {
-    riskDetails: {
+    jobDetails: {
+      job_name: 'test job name',
+      pm_first_name: 'firstname',
+      pm_last_name: 'lastname',
+      pm_email: 'test.email@arup.com',
+      pm_number: '01234123123'
+    },
+    siteDetails: {
       1: [
-        { riskId: '11111', createdAt: 'Tues 27th' },
-        { riskId: '22222', createdAt: 'Fri 23rd' },
-        { riskId: '33333', createdAt: 'Mon 19th' }
+        {
+          siteId: '11111',
+          createdAt: 'Tues 27th',
+          createdBy: 'tish@arup.com'
+        },
+        { siteId: '22222', createdAt: 'Fri 23rd', createdBy: 'tish@arup.com' },
+        { siteId: '33333', createdAt: 'Mon 19th', createdBy: 'ben@arup.com' }
       ],
       2: [
-        { riskId: '44444', createdAt: 'Sat 10th' },
-        { riskId: '55555', createdAt: 'Sat 10th' },
-        { riskId: '66666', createdAt: 'Sat 10th' },
-        { riskId: '77777', createdAt: 'Sat 10th' }
+        { siteId: '44444', createdAt: 'Sat 10th', createdBy: 'tish@arup.com' },
+        { siteId: '55555', createdAt: 'Sat 10th', createdBy: 'ben@arup.com' },
+        { siteId: '66666', createdAt: 'Sat 10th', createdBy: 'dan@arup.com' },
+        { siteId: '77777', createdAt: 'Sat 10th', createdBy: 'tish@arup.com' }
       ],
       3: [
-        { riskId: '88888', createdAt: 'Sat 10th' },
-        { riskId: '99999', createdAt: 'Sat 10th' },
-        { riskId: '12345', createdAt: 'Sat 10th' },
-        { riskId: '55865', createdAt: 'Tues 5th' }
+        { siteId: '88888', createdAt: 'Sat 10th', createdBy: 'tish@arup.com' },
+        { siteId: '99999', createdAt: 'Sat 10th', createdBy: 'ben@arup.com' },
+        { siteId: '12345', createdAt: 'Sat 10th', createdBy: 'dan@arup.com' },
+        { siteId: '55865', createdAt: 'Tues 5th', createdBy: 'ben@arup.com' }
       ]
     }
   };
   render() {
+    const { jobDetails } = this.state;
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Carousel
-          data={Object.keys(this.state.riskDetails)}
-          style={{
-            flex: 1,
-            width: width,
-            borderWidth: 1
-          }}
-          itemWidth={ListView.WIDTH}
-          threshold={120}
-          contentOffset={0}
-          renderItem={({ item }) => (
-            <View style={{ flex: 1, width: width, paddingHorizontal: 10 }}>
+      <React.Fragment>
+        <JobContent jobDetails={jobDetails} />
+        <Titlebar>
+          <Title>Risk assessment on your job below</Title>
+          <Name>swipe right to see more sites on your job</Name>
+        </Titlebar>
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <Carousel
+            data={Object.keys(this.state.siteDetails)}
+            style={{
+              flex: 1,
+              width: SCREEN_WIDTH - 10,
+              borderWidth: 0
+            }}
+            itemWidth={ListView.WIDTH}
+            threshold={120}
+            contentOffset={0}
+            renderItem={({ item }) => (
               <View
-                style={{
-                  flex: 0.3,
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  borderWidth: 0.5,
-                  margin: 20
-                }}
+                style={{ flex: 1, width: SCREEN_WIDTH, paddingHorizontal: 10 }}
               >
-                <Text>Job info</Text>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <ListView
+                    itemList={this.state.siteDetails[item]}
+                    navigation={this.props.navigation}
+                    parent="Job"
+                  />
+                </View>
               </View>
-              <View
-                style={{
-                  flex: 0.7,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <ListView
-                  itemList={this.state.riskDetails[item]}
-                  navigation={this.props.navigation}
-                  parent="Job"
-                />
-              </View>
-            </View>
-          )}
-        />
-      </View>
+            )}
+          />
+        </View>
+      </React.Fragment>
     );
   }
 }
+
+const Titlebar = styled.View`
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding: 10px;
+  background: #fff;
+  align-items: center;
+  align-content: center;
+`;
+
+const Title = styled.Text`
+  font-size: 20px;
+  font-weight: 500;
+  color: #b8bece;
+`;
+
+const Name = styled.Text`
+  font-size: 15px;
+  color: #3c4560;
+  font-weight: bold;
+`;
