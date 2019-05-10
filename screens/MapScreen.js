@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, View, Text, StyleSheet } from 'react-native';
-import { Constants, MapView, Location, Permissions } from 'expo';
-import { Polygon } from 'react-native-maps';
+import { Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+// import { Constants, MapView, Location, Permissions } from 'expo';
+import MapView, { Polygon } from 'react-native-maps';
+import Communications from 'react-native-communications';
 
 export default class MapScreen extends React.Component {
   static navigationOptions = {
@@ -9,11 +10,31 @@ export default class MapScreen extends React.Component {
   };
   state = {
     boundary: [
-      { latitude: 54.798332, longitude: -1.558739 },
-      { latitude: 54.798553, longitude: -1.530716 },
-      { latitude: 54.787372, longitude: -1.531405 },
-      { latitude: 54.788328, longitude: -1.558051 }
+      { latitude: 53.798332, longitude: -1.558739 },
+      { latitude: 53.798553, longitude: -1.530716 },
+      { latitude: 53.787372, longitude: -1.531405 },
+      { latitude: 53.788328, longitude: -1.558051 }
     ],
+    checkedIn: false,
+    failedCheckIn: false
+  };
+  textNumber = () => {
+    if (!this.state.checkedIn) {
+      Communications.text(
+        '07846946661',
+        'seeing if this react native communications thing works for texts #TishsAngels'
+      );
+      this.setState({ checkedIn: true });
+    } else {
+      this.setState({ failedCheckIn: true });
+    }
+  };
+  resetFailedCheckIn = () => {
+    this.setState({ failedCheckIn: false });
+  };
+  resetCheckedIn = () => {
+    this.setState({ failedCheckIn: false });
+    this.setState({ checkedIn: false });
   };
 
   render() {
@@ -22,8 +43,16 @@ export default class MapScreen extends React.Component {
         <MapView
           style={{ alignSelf: 'stretch', flex: 0.8 }}
           region={{
-            latitude: this.state.boundary.reduce((sum,current) => sum + current.latitude, 0)/this.state.boundary.length,
-            longitude: this.state.boundary.reduce((sum,current) => sum + current.longitude, 0)/this.state.boundary.length,
+            latitude:
+              this.state.boundary.reduce(
+                (sum, current) => sum + current.latitude,
+                0
+              ) / this.state.boundary.length,
+            longitude:
+              this.state.boundary.reduce(
+                (sum, current) => sum + current.longitude,
+                0
+              ) / this.state.boundary.length,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}
@@ -37,8 +66,25 @@ export default class MapScreen extends React.Component {
             coordinates={this.state.boundary}
           />
         </MapView>
-        <View style={{flex:0.2}}>
-          <Button></Button>
+        <View style={{ flex: 0.2 }}>
+          {!this.state.failedCheckIn ? (
+            <Button
+              onPress={this.textNumber}
+              title="On Site"
+              color="#841584"
+              accessibilityLabel="Learn more about this purple button"
+            />
+          ) : (
+            <View>
+              <Text>You have already checked in</Text>
+              <TouchableOpacity onPress={this.resetFailedCheckIn}>
+                <Text>OK</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.resetCheckedIn}>
+                <Text>Re-check in</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </View>
     );
