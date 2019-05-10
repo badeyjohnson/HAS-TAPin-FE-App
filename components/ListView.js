@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const ListView = ({ itemList, navigation }) => (
+const ListView = ({ itemList, navigation, parent }) => (
   <View style={styles.container}>
     <FlatList
       numColumns={2}
