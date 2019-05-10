@@ -11,13 +11,9 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
-<<<<<<< HEAD
     "react-navigation": "^3.9.1",
-    "styled-components": "^4.2.0"
-=======
-    "react-native-sideswipe": "^1.4.2",
-    "react-navigation": "^3.9.1"
->>>>>>> cb12e6671ed8ade4b0e068bf37ff5db0436169e9
+    "styled-components": "^4.2.0",
+    "react-native-sideswipe": "^1.4.2"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
