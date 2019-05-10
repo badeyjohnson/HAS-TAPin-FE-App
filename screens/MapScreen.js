@@ -1,65 +1,45 @@
 import React from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import { Constants, MapView, Location, Permissions } from 'expo';
-import {Polygon} from 'react-native-maps'
+import { Polygon } from 'react-native-maps';
 
 export default class MapScreen extends React.Component {
   static navigationOptions = {
     title: 'Map'
   };
   state = {
-    mapRegion: {
-      latitude: 37.78825,
-      longitude: -122.4324,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421
-    },
     boundary: [
-      { latitude: 53.798332, longitude: -1.558739 },
-      { latitude: 53.798553, longitude: -1.530716 },
-      { latitude: 53.787372, longitude: -1.531405 },
-      { latitude: 53.788328, longitude: -1.558051 }
+      { latitude: 54.798332, longitude: -1.558739 },
+      { latitude: 54.798553, longitude: -1.530716 },
+      { latitude: 54.787372, longitude: -1.531405 },
+      { latitude: 54.788328, longitude: -1.558051 }
     ],
-    locationResult: null,
-    location: { coords: { latitude: 37.78825, longitude: -122.4324 } }
   };
 
-  componentDidMount() {
-    this._getLocationAsync();
-  }
-
-  _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      this.setState({
-        locationResult: 'Permission to access location was denied',
-        location
-      });
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    this.setState({ locationResult: JSON.stringify(location), location });
-  };
   render() {
     return (
       <View style={styles.container}>
         <MapView
           style={{ alignSelf: 'stretch', flex: 0.8 }}
           region={{
-            latitude: this.state.location.coords.latitude,
-            longitude: this.state.location.coords.longitude,
+            latitude: this.state.boundary.reduce((sum,current) => sum + current.latitude, 0)/this.state.boundary.length,
+            longitude: this.state.boundary.reduce((sum,current) => sum + current.longitude, 0)/this.state.boundary.length,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}
           showsUserLocation={true}
         >
           <Polygon
-          strokeWidth={1}
-          strokeColor={'#b642f4'}
-          fillColor={'#d59ff2'}
+            strokeWidth={1}
+            strokeColor={'#b642f4'}
+            // use a rgba instead for fill color
+            fillColor={'#d59ff2'}
             coordinates={this.state.boundary}
           />
         </MapView>
+        <View style={{flex:0.2}}>
+          <Button></Button>
+        </View>
       </View>
     );
   }
