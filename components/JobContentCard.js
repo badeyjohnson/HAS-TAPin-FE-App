@@ -7,12 +7,12 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const Card = ({ jobDetails }) => (
   <Container>
     <Content>
-      <Title>Job Name:{jobDetails.job_name}</Title>
+      <Title>Job Name: {jobDetails.job_name}</Title>
       <Caption>
-        PM Name:{jobDetails.pm_first_name} {jobDetails.pm_last_name}
+        PM Name: {jobDetails.pm_first_name} {jobDetails.pm_last_name}
       </Caption>
-      <Caption>PM Email:{jobDetails.pm_email}</Caption>
-      <Caption>PM Contact No:{jobDetails.pm_number}</Caption>
+      <Caption>PM Email: {jobDetails.pm_email}</Caption>
+      <Caption>PM Contact No: {jobDetails.pm_number}</Caption>
     </Content>
   </Container>
 );
@@ -30,6 +30,7 @@ const Container = styled.View`
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   align-items: center;
   align-content: center;
+  justify-content: flex-start;
 `;
 
 const Cover = styled.View`

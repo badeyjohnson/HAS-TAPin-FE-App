@@ -7,14 +7,15 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const Card = ({ item, navigation }) => (
   <Container>
     <TouchableOpacity onPress={() => navigation.navigate('SSRA', '')}>
-    <Content>
-      <Titlebar>
-        <Avatar source={require('../images/avatar.png')} />
-        <Title>Site Specfic Risk Register</Title>
-        <Caption>Created at:{item.createdAt}</Caption>
-        <Caption>Created by:{item.createdBy}</Caption>
-      </Titlebar>
-    </Content>
+      <Content>
+        <Titlebar>
+          <Avatar source={require('../images/avatar.png')} />
+          <Title>Site Specfic Risk Register</Title>
+          <Name>Job: {item.site_name}</Name>
+          <Caption>Created at: {item.createdAt}</Caption>
+          <Caption>Created by: {item.createdBy.split('.')[0]}</Caption>
+        </Titlebar>
+      </Content>
     </TouchableOpacity>
   </Container>
 );
@@ -30,9 +31,9 @@ const Container = styled.View`
   margin-top: 18px;
   margin-bottom: 15px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  align-items: center;
-  align-content: center;
-  
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: flex-start;
 `;
 
 const Content = styled.View`
@@ -42,6 +43,7 @@ const Content = styled.View`
   margin-bottom: 10px;
   height: 100px;
   overflow: hidden;
+  margin-left: 30px;
 `;
 
 const Title = styled.Text`
@@ -70,14 +72,14 @@ const Avatar = styled.Image`
 `;
 
 const Name = styled.Text`
-  font-size: 20px;
+  font-size: 12px;
   color: #3c4560;
   font-weight: bold;
 `;
 
 const Caption = styled.Text`
   color: #b8b3c3;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 600;
   margin-top: 4px;
 `;

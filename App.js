@@ -22,6 +22,9 @@ const RootStack = createStackNavigator(
 
     // sets the default header styling for all routes
     defaultNavigationOptions: {
+      headerBackTitleStyle: {
+        fontWeight: 'bold'
+      },
       headerStyle: {
         backgroundColor: '#696eb4'
       },

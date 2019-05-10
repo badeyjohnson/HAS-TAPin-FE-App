@@ -8,7 +8,7 @@ import {
   FlatList
 } from 'react-native';
 import ListView from '../components/ListView';
-import Carousel from 'react-native-sideswipe';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import JobContent from '../components/JobContentCard';
 import styled from 'styled-components';
 
@@ -40,13 +40,13 @@ export default class JobsScreen extends React.Component {
           siteId: '22222',
           createdAt: 'Fri 23rd',
           createdBy: 'tish.richardson@arup.com',
-          site_name: 'big one'
+          site_name: 'tall one'
         },
         {
           siteId: '33333',
           createdAt: 'Mon 19th',
           createdBy: 'ben@arup.com',
-          site_name: 'big one'
+          site_name: 'short one'
         }
       ],
       2: [
@@ -54,25 +54,25 @@ export default class JobsScreen extends React.Component {
           siteId: '44444',
           createdAt: 'Sat 10th',
           createdBy: 'tish.richardson@arup.com',
-          site_name: 'big one'
+          site_name: 'long one'
         },
         {
           siteId: '55555',
           createdAt: 'Sat 10th',
-          createdBy: 'ben@arup.com',
-          site_name: 'big one'
+          createdBy: 'ben.@arup.com',
+          site_name: 'massive one'
         },
         {
           siteId: '66666',
           createdAt: 'Sat 10th',
-          createdBy: 'dan@arup.com',
-          site_name: 'big one'
+          createdBy: 'dan.@arup.com',
+          site_name: 'old one'
         },
         {
           siteId: '77777',
           createdAt: 'Sat 10th',
           createdBy: 'tish.richardson@arup.com',
-          site_name: 'big one'
+          site_name: 'new one'
         }
       ],
       3: [
@@ -101,8 +101,30 @@ export default class JobsScreen extends React.Component {
           site_name: 'big one'
         }
       ]
-    }
+    },
+    activeSlide: 0
   };
+  get pagination() {
+    const { activeSlide } = this.state;
+    return (
+      <Pagination
+        dotsLength={Object.keys(this.state.siteDetails).length}
+        activeDotIndex={activeSlide}
+        containerStyle={{ backgroundColor: 'white' }}
+        dotColor={'#394384'}
+        inactiveDotColor={'#9a9ce6'}
+        dotStyle={{
+          width: 10,
+          height: 10,
+          borderRadius: 5,
+          marginHorizontal: 8,
+          backgroundColor: 'rgba(255, 255, 255, 0.92)'
+        }}
+        inactiveDotOpacity={0.4}
+        inactiveDotScale={0.6}
+      />
+    );
+  }
   render() {
     const { jobDetails } = this.state;
     return (
@@ -112,40 +134,24 @@ export default class JobsScreen extends React.Component {
           <Title>Risk assessment on your job below</Title>
           <Name>swipe right to see more sites on your job</Name>
         </Titlebar>
-        <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-        >
           <Carousel
+            layout={'default'}
             data={Object.keys(this.state.siteDetails)}
-            style={{
-              flex: 1,
-              width: SCREEN_WIDTH - 10,
-              borderWidth: 0
+            ref={c => {
+              this._carousel = c;
             }}
-            itemWidth={ListView.WIDTH}
-            threshold={120}
-            contentOffset={0}
+            sliderWidth={SCREEN_WIDTH}
+            itemWidth={SCREEN_WIDTH}
+            onSnapToItem={index => this.setState({ activeSlide: index })}
             renderItem={({ item }) => (
-              <View
-                style={{ flex: 1, width: SCREEN_WIDTH, paddingHorizontal: 10 }}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <ListView
-                    itemList={this.state.siteDetails[item]}
-                    navigation={this.props.navigation}
-                    parent="Job"
-                  />
-                </View>
-              </View>
+              <ListView
+                itemList={this.state.siteDetails[item]}
+                navigation={this.props.navigation}
+                parent="Job"
+              />
             )}
           />
-        </View>
+          {this.pagination}
       </React.Fragment>
     );
   }
