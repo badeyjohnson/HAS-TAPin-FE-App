@@ -18,7 +18,7 @@ const RootStack = createStackNavigator(
     Submit: SubmitScreen
   },
   {
-    initialRouteName: 'Job',
+    initialRouteName: 'Map',
 
     // sets the default header styling for all routes
     defaultNavigationOptions: {
