@@ -15,8 +15,6 @@ import {
   Avatar,
   ThemeProvider
 } from 'react-native-elements';
-const faker = require('faker');
-const image = faker.image.city();
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
