@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { View, FlatList, StyleSheet, Text, Dimensions } from 'react-native';
 import ListRow from './ListRow';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.9,
-    marginLeft: 0
+    flex: 0.97,
+    width: SCREEN_WIDTH,
+    // backgroundColor: 'blue'
   }
 });
 

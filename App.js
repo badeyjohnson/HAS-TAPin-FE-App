@@ -23,7 +23,7 @@ const RootStack = createStackNavigator(
     // sets the default header styling for all routes
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#f4511e'
+        backgroundColor: '#696eb4'
       },
       headerTintColor: '#fff',
       headerTitleStyle: {
@@ -40,11 +40,3 @@ export default class App extends React.Component {
     return <AppNavigator />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});
