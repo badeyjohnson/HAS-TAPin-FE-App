@@ -7,7 +7,14 @@ import {
   Dimensions,
   FlatList
 } from 'react-native';
-import { Overlay, Text, Button, Input, Icon } from 'react-native-elements';
+import {
+  Overlay,
+  Text,
+  Button,
+  Input,
+  Icon,
+  Keyboard
+} from 'react-native-elements';
 import styled from 'styled-components';
 import ListView from '../components/ListView';
 import AddIcon from '../components/AddIcon';
@@ -103,11 +110,11 @@ export default class HomeScreen extends React.Component {
               autoCorrect={false}
               keyboardType="numeric"
               returnKeyType="done"
-              // ref={input => (this.emailInput = input)}
               onSubmitEditing={() => {
                 this.setState({ foundJob: this.findJob(jobNumber) });
+                // () => Keyboard.dismiss();
               }}
-              blurOnSubmit={false}
+              blurOnSubmit={true}
               placeholderTextColor="black"
               errorStyle={{
                 textAlign: 'center',
