@@ -5,15 +5,18 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  Dimensions
 } from 'react-native';
 import ListView from '../components/ListView';
 import AddIcon from '../components/AddIcon';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: navigation.getParam('email', ''),
+      headerTitle: 'My Jobs',
       headerRight: (
         <TouchableHighlight onPress={navigation.getParam('addJob')}>
           <View>
@@ -31,18 +34,7 @@ export default class HomeScreen extends React.Component {
     addJob: false,
     jobs: [
       { jNum: '11111', jName: 'big metal one' },
-      { jNum: '22222', jName: 'small bamboo one' },
-      { jNum: '33333', jName: 'medium duck egg blue one' },
-      { jNum: '33453', jName: 'medium duck egg blue one' },
-      { jNum: '35553', jName: 'medium duck egg blue one' },
-      { jNum: '66666', jName: 'medium duck egg blue one' },
-      { jNum: '77777', jName: 'medium duck egg blue one' },
-      { jNum: '88888', jName: 'medium duck egg blue one' },
-      { jNum: '99999', jName: 'medium duck egg blue one' },
-      { jNum: '00000', jName: 'medium duck egg blue one' },
-      { jNum: '45678', jName: 'medium duck egg blue one' },
-      { jNum: '12345', jName: 'medium duck egg blue one' },
-      { jNum: '98765', jName: 'medium duck egg blue one' }
+      { jNum: '22222', jName: 'small bamboo one' }
     ]
   };
   handleAddJob = () => {
@@ -57,17 +49,15 @@ export default class HomeScreen extends React.Component {
   };
 
   render() {
-    const { navigation } = this.props;
-    const email = navigation.getParam('email', '');
     return !this.state.addJob ? (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.background}>
         <ListView
           itemList={this.state.jobs}
           navigation={this.props.navigation}
         />
       </View>
     ) : (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.background}>
         <Text>Find a job</Text>
         <TextInput
           placeholder="Job Number"
@@ -82,6 +72,12 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#EEEEEE',
+  },
   input: {
     margin: 15,
     height: 40,

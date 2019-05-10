@@ -50,7 +50,6 @@ export default class SignInScreen extends React.Component {
           this.validatePassword(password) || this.passwordInput.shake()
       });
     }, 1500);
-    console.log(isEmailValid, isPasswordValid);
     if (isEmailValid && isPasswordValid) {
       this.props.navigation.navigate('Home', this.state);
     }
@@ -216,9 +215,6 @@ const styles = StyleSheet.create({
   },
   loginInput: {
     flex: 1,
-    // backgroundColor: 'green',
-    // width: 250,
-    // height: 200,
     justifyContent: 'flex-start',
     alignItems: 'flex-start'
   }
