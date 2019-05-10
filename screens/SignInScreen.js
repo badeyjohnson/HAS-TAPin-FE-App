@@ -150,7 +150,7 @@ export default class SignInScreen extends React.Component {
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="default"
-                returnKeyType="done"
+                // returnKeyType="done"
                 ref={input => (this.passwordInput = input)}
                 blurOnSubmit={true}
                 placeholderTextColor="black"

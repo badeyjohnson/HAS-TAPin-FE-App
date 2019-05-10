@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  Button,
   View,
-  Text,
   StyleSheet,
   TextInput,
-  TouchableHighlight,
-  Dimensions
+  TouchableOpacity,
+  Dimensions,
+  FlatList
 } from 'react-native';
+import { Overlay, Text, Button, Input, Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import ListView from '../components/ListView';
 import AddIcon from '../components/AddIcon';
@@ -19,11 +19,11 @@ export default class HomeScreen extends React.Component {
     return {
       headerTitle: 'My Jobs',
       headerRight: (
-        <TouchableHighlight onPress={navigation.getParam('addJob')}>
+        <TouchableOpacity onPress={navigation.getParam('addJob')}>
           <View>
-            <AddIcon onPress={navigation.getParam('addJob')} />
+            <AddIcon />
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       )
     };
   };
@@ -32,7 +32,8 @@ export default class HomeScreen extends React.Component {
   }
   state = {
     jobNumber: '',
-    addJob: false,
+    foundJob: true,
+    addJob: true,
     jobs: [
       { jNum: '11111', jName: 'big metal one' },
       { jNum: '22222', jName: 'small bamboo one' },
@@ -45,18 +46,21 @@ export default class HomeScreen extends React.Component {
   handleAddJob = () => {
     this.setState({ addJob: true });
   };
-  handleJobNumber = text => {
-    this.setState({ jobNumber: text });
-  };
 
   handleAddJobSubmit = () => {
     this.setState({ addJob: false });
   };
+  findJob = jobNumber => {
+    // api call check job exists
+    // console.log(jobNumber)
+    return true;
+  };
 
   render() {
     const { navigation } = this.props;
+    const { foundJob, jobNumber } = this.state;
     const email = navigation.getParam('email', '');
-    return !this.state.addJob ? (
+    return (
       <React.Fragment>
         <Titlebar>
           <Avatar source={require('../images/avatar.png')} />
@@ -69,23 +73,72 @@ export default class HomeScreen extends React.Component {
             navigation={this.props.navigation}
           />
         </View>
+        <Overlay
+          isVisible={this.state.addJob}
+          overlayBackgroundColor="white"
+          width={300}
+          height={400}
+          overlayStyle={styles.modal}
+        >
+          <React.Fragment>
+            <Text h4>Find a job</Text>
+            <Text>{`\n`}</Text>
+            <Input
+              leftIcon={
+                <Icon
+                  name="tasks"
+                  type="font-awesome"
+                  color="black"
+                  size={25}
+                />
+              }
+              containerStyle={{ marginVertical: 10 }}
+              onChangeText={jobNumber => this.setState({ jobNumber })}
+              value={jobNumber}
+              inputStyle={{ marginLeft: 10, color: 'black' }}
+              keyboardAppearance="light"
+              placeholder="Job Number"
+              autoFocus={false}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="numeric"
+              returnKeyType="done"
+              // ref={input => (this.emailInput = input)}
+              onSubmitEditing={() => {
+                this.setState({ foundJob: this.findJob(jobNumber) });
+              }}
+              blurOnSubmit={false}
+              placeholderTextColor="black"
+              errorStyle={{
+                textAlign: 'center',
+                fontSize: 12,
+                color: 'black',
+                fontWeight: 'bold'
+              }}
+              errorMessage={foundJob ? null : 'Job No. Not Found'}
+            />
+            <Text>{`\n`}</Text>
+            <Button title="Submit" onPress={this.handleAddJobSubmit} />
+
+            <Button
+              type="outline"
+              title="Cancel"
+              onPress={() => this.setState({ addJob: false })}
+            />
+          </React.Fragment>
+        </Overlay>
       </React.Fragment>
-    ) : (
-      <View style={styles.background}>
-        <Text>Find a job</Text>
-        <TextInput
-          placeholder="Job Number"
-          keyboardType="numeric"
-          style={styles.input}
-          onChangeText={this.handleJobNumber}
-        />
-        <Button title="Submit" onPress={this.handleAddJobSubmit} />
-      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  modal: {
+    // flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 15
+  },
   background: {
     flex: 1,
     alignItems: 'center',
