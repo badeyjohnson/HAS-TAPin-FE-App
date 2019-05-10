@@ -35,7 +35,11 @@ export default class HomeScreen extends React.Component {
     addJob: false,
     jobs: [
       { jNum: '11111', jName: 'big metal one' },
-      { jNum: '22222', jName: 'small bamboo one' }
+      { jNum: '22222', jName: 'small bamboo one' },
+      { jNum: '3333', jName: 'small bamboo one' },
+      { jNum: '4444', jName: 'small bamboo one' },
+      { jNum: '5555', jName: 'small bamboo one' },
+      { jNum: '6666', jName: 'small bamboo one' }
     ]
   };
   handleAddJob = () => {
@@ -54,13 +58,11 @@ export default class HomeScreen extends React.Component {
     const email = navigation.getParam('email', '');
     return !this.state.addJob ? (
       <React.Fragment>
-        {/* <Container> */}
         <Titlebar>
           <Avatar source={require('../images/avatar.png')} />
           <Title>Welcome back,</Title>
           <Name>{email.split('.')[0]}</Name>
         </Titlebar>
-        {/* </Container> */}
         <View style={styles.background}>
           <ListView
             itemList={this.state.jobs}
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white'
+    backgroundColor: '#fff'
   },
   input: {
     margin: 15,
@@ -102,8 +104,9 @@ const styles = StyleSheet.create({
 const Titlebar = styled.View`
   width: 100%;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   padding-left: 80px;
+  background: #fff;
 `;
 
 const Avatar = styled.Image`

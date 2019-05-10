@@ -30,8 +30,8 @@ export default class SignInScreen extends React.Component {
     }
   };
   state = {
-    email: '',
-    password: '',
+    email: 'tish.richardson@arup.com',
+    password: 'tish123',
     isLoading: false,
     isEmailValid: true,
     isPasswordValid: true
@@ -65,7 +65,7 @@ export default class SignInScreen extends React.Component {
     return re.test(email);
   };
   validatePassword = password => {
-    return password.length >= 8;
+    return password.length >= 6;
   };
 
   render() {

@@ -1,27 +1,25 @@
 import React from 'react';
 import { View, FlatList, StyleSheet, Text, Dimensions } from 'react-native';
-import ListRow from './ListRow';
+import Card from './Card';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 2,
+    flexWrap: 'wrap',
     width: SCREEN_WIDTH,
-    // backgroundColor: 'blue'
+    backgroundColor: 'white'
   }
 });
 
 const ListView = ({ itemList, navigation }) => (
   <View style={styles.container}>
     <FlatList
+      numColumns={2}
       data={itemList}
       renderItem={({ item }) => (
-        <ListRow
-          title={item.jNum}
-          description={item.jName}
-          navigation={navigation}
-        />
+        <Card title={item.jNum} description={item.jName} navigation={navigation}/>
       )}
       keyExtractor={item => item.jNum}
     />

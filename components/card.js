@@ -1,15 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
+import { TouchableOpacity } from 'react-native';
 
 const Card = ({ title, description, navigation }) => (
   <Container>
-    <Cover>
-      <Image source={require('../images/building.jpg')} />
-    </Cover>
-    <Content>
-      <Title>{title}</Title>
-      <Caption>{description}</Caption>
-    </Content>
+    <TouchableOpacity onPress={() => navigation.navigate('Job', title)}>
+      <React.Fragment>
+        <Cover>
+          <Image source={require('../images/building.jpg')} />
+        </Cover>
+        <Content>
+          <Title>{title}</Title>
+          <Caption>{description}</Caption>
+        </Content>
+      </React.Fragment>
+    </TouchableOpacity>
   </Container>
 );
 
@@ -21,8 +26,8 @@ const Container = styled.View`
   width: 150px;
   border-radius: 14px;
   margin: 18px;
-  margin-top: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  margin-top: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 `;
 
 const Cover = styled.View`
