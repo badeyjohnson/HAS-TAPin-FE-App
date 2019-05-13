@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, View, Text, StyleSheet } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; // Version can be specified in package.json
 import SignInScreen from './screens/SignInScreen';
 import HomeScreen from './screens/HomeScreen';

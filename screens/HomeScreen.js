@@ -40,7 +40,7 @@ export default class HomeScreen extends React.Component {
   state = {
     jobNumber: '',
     foundJob: true,
-    addJob: true,
+    addJob: false,
     jobs: [
       { jNum: '11111', jName: 'big metal one' },
       { jNum: '22222', jName: 'small bamboo one' },

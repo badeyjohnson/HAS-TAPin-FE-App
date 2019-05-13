@@ -3,10 +3,21 @@ import { Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 // import { Constants, MapView, Location, Permissions } from 'expo';
 import MapView, { Polygon } from 'react-native-maps';
 import Communications from 'react-native-communications';
+import AddIcon from '../components/AddIcon';
+
 
 export default class MapScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Map'
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: 'Map',
+      headerRight: (
+        <TouchableOpacity onPress={navigation.getParam('addJob')}>
+          <View>
+            <AddIcon />
+          </View>
+        </TouchableOpacity>
+      )
+    };
   };
   state = {
     boundary: [
@@ -17,12 +28,13 @@ export default class MapScreen extends React.Component {
     ],
     checkedIn: false,
     failedCheckIn: false,
-    checkedOut: false
+    checkedOut: false,
+    LRBVisability: false
   };
   textNumberCheckIn = () => {
     if (!this.state.checkedIn) {
       Communications.text(
-        '07846946661',
+        '',
         'seeing if this react native communications thing works for texts #TishsAngels'
       );
       this.setState({ checkedIn: true });
@@ -32,7 +44,7 @@ export default class MapScreen extends React.Component {
   };
 
   textNumberCheckOut = () => {
-    Communications.text('07846946661', 'Job done #TishsAngels');
+    Communications.text('', 'Job done #TishsAngels');
     this.setState({ checkedOut: true });
   };
 
@@ -92,10 +104,10 @@ export default class MapScreen extends React.Component {
           ) : (
             <View>
               <Text>You have already checked in</Text>
-              <TouchableOpacity onPress={()=> this.resetFailedCheckIn}>
+              <TouchableOpacity onPress={() => this.resetFailedCheckIn}>
                 <Text>OK</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=>this.resetCheckedIn}>
+              <TouchableOpacity onPress={() => this.resetCheckedIn}>
                 <Text>Re-check in</Text>
               </TouchableOpacity>
             </View>
@@ -104,11 +116,18 @@ export default class MapScreen extends React.Component {
       </View>
     ) : (
       <View style={styles.container}>
-        <Text>You have checked out. Did you come across anything that needs to be added to the risk assessment?</Text>
-        <TouchableOpacity onPress={()=>this.props.navigation.navigate('SSRA')}>
+        <Text>
+          You have checked out. Did you come across anything that needs to be
+          added to the risk assessment?
+        </Text>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('SSRA')}
+        >
           <Text>Yes</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>this.props.navigation.navigate('Submit')}>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Home')}
+        >
           <Text>No</Text>
         </TouchableOpacity>
       </View>
