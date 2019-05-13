@@ -112,7 +112,6 @@ export default class HomeScreen extends React.Component {
               returnKeyType="done"
               onSubmitEditing={() => {
                 this.setState({ foundJob: this.findJob(jobNumber) });
-                // () => Keyboard.dismiss();
               }}
               blurOnSubmit={true}
               placeholderTextColor="black"
