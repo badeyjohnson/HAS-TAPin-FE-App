@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Dimensions, TouchableOpacity } from 'react-native';
+import dateConverter from '../utils/utils';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -11,9 +12,9 @@ const Card = ({ item, navigation }) => (
         <Titlebar>
           <Avatar source={require('../images/avatar.png')} />
           <Title>Site Specfic Risk Register</Title>
-          <Name>Job: {item.site_name}</Name>
-          <Caption>Created at: {item.createdAt}</Caption>
-          <Caption>Created by: {item.createdBy.split('.')[0]}</Caption>
+          <Name>Site: {item.site_name}</Name>
+          <Caption>Created at: {dateConverter(item.created_at)}</Caption>
+          <Caption>Created by: {item.user.split('.')[0]}</Caption>
         </Titlebar>
       </Content>
     </TouchableOpacity>

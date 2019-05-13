@@ -18,6 +18,7 @@ import {
 import styled from 'styled-components';
 import ListView from '../components/ListView';
 import AddIcon from '../components/AddIcon';
+import { fetchUserJobs, fetchJob, linkUserToJob } from '../api';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -34,33 +35,43 @@ export default class HomeScreen extends React.Component {
       )
     };
   };
-  componentDidMount() {
-    this.props.navigation.setParams({ addJob: this.handleAddJob });
-  }
   state = {
     jobNumber: '',
     foundJob: true,
     addJob: false,
-    jobs: [
-      { jNum: '11111', jName: 'big metal one' },
-      { jNum: '22222', jName: 'small bamboo one' },
-      { jNum: '3333', jName: 'small bamboo one' },
-      { jNum: '4444', jName: 'small bamboo one' },
-      { jNum: '5555', jName: 'small bamboo one' },
-      { jNum: '6666', jName: 'small bamboo one' }
-    ]
+    jobs: []
+  };
+
+  componentDidMount = async () => {
+    const { navigation } = this.props;
+    navigation.setParams({ addJob: this.handleAddJob });
+    const email = navigation.getParam('email', '');
+    const returned = await fetchUserJobs(email);
+    const jobs = returned.map(job => {
+      return { jNum: job.job_no, jName: job.job_name };
+    });
+    this.setState({ jobs });
   };
   handleAddJob = () => {
     this.setState({ addJob: true });
   };
 
-  handleAddJobSubmit = () => {
-    this.setState({ addJob: false });
-  };
-  findJob = jobNumber => {
-    // api call check job exists
-    // console.log(jobNumber)
-    return true;
+  handleAddJobSubmit = async () => {
+    const { navigation } = this.props;
+    const { jobNumber, jobs } = this.state;
+    const email = navigation.getParam('email', '');
+    const number = Number(jobNumber);
+    const returned = await fetchJob(number);
+    if (returned.job_no === number) {
+      linkUserToJob(email, number);
+      const newJobs = [
+        ...jobs,
+        { jName: returned.job_name, jNum: returned.job_no }
+      ];
+      this.setState({ addJob: false, foundJob: true, jobs: newJobs });
+    } else {
+      this.setState({ foundJob: false });
+    }
   };
 
   render() {
@@ -110,9 +121,6 @@ export default class HomeScreen extends React.Component {
               autoCorrect={false}
               keyboardType="numeric"
               returnKeyType="done"
-              onSubmitEditing={() => {
-                this.setState({ foundJob: this.findJob(jobNumber) });
-              }}
               blurOnSubmit={true}
               placeholderTextColor="black"
               errorStyle={{
@@ -125,7 +133,6 @@ export default class HomeScreen extends React.Component {
             />
             <Text>{`\n`}</Text>
             <Button title="Submit" onPress={this.handleAddJobSubmit} />
-
             <Button
               type="outline"
               title="Cancel"

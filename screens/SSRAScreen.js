@@ -44,7 +44,7 @@ export default class SSRAScreen extends React.Component {
       <Risks />,
       <PPE />,
       <HighRisk />,
-      <Read />
+      <Read navigation={this.props.navigation} />
     ];
     return (
       <React.Fragment>
