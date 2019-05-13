@@ -18,7 +18,7 @@ const RootStack = createStackNavigator(
     Submit: SubmitScreen
   },
   {
-    initialRouteName: 'Job',
+    initialRouteName: 'SSRA',
 
     // sets the default header styling for all routes
     defaultNavigationOptions: {
