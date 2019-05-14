@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  FlatList
-} from 'react-native';
+import { Text, Dimensions } from 'react-native';
 import ListView from '../components/ListView';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import JobContent from '../components/JobContentCard';
@@ -21,6 +14,7 @@ export default class JobsScreen extends React.Component {
       headerTitle: navigation.state.params
     };
   };
+
   state = {
     loading: true,
     jobDetails: {},
@@ -90,6 +84,7 @@ export default class JobsScreen extends React.Component {
                 <ListView
                   itemList={siteDetails[item]}
                   navigation={this.props.navigation}
+                  jobDetails={jobDetails}
                   parent="Job"
                 />
               )}

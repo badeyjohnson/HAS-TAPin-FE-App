@@ -16,16 +16,28 @@ export default class SSRAScreen extends React.Component {
     title: 'SSRA'
   };
 
-  state = { activeSlide: 0, loading: true };
+  state = { activeSlide: 0, loading: true, disabled: true };
 
   componentDidMount = async () => {
     const {
       navigation: {
         state: {
-          params: { site_id, SSRAid }
+          params: { site_id, SSRAid },
+          params
         }
       }
     } = this.props;
+    this.props.navigation.addListener('didFocus', () => {
+      // console.log('ssra', this.props.navigation.state.params.makeChange);
+      if (this.props.navigation.state.params.makeChange === true) {
+        this.makeChange();
+      }
+      console.log('user has navigated to this screen');
+    });
+
+    this.props.navigation.addListener('didBlur', () => {
+      console.log('user has navigated away from this screen');
+    });
 
     const assessment = await fetchRiskAssessment(site_id, SSRAid);
     const sorted = assessment.sort((a, b) => a.question_id - b.question_id);
@@ -40,7 +52,6 @@ export default class SSRAScreen extends React.Component {
     const additionalInfo = sorted.filter(
       question => question.question_id === 35
     );
-
     this.setState({
       loading: false,
       siteInfo,
@@ -73,6 +84,12 @@ export default class SSRAScreen extends React.Component {
     );
   }
 
+  makeChange = () => {
+    this.setState({ disabled: false });
+  };
+
+  submitChanges = () => {};
+
   render() {
     const {
       loading,
@@ -80,21 +97,37 @@ export default class SSRAScreen extends React.Component {
       workingHours,
       risksGeneral,
       ppe,
-      additionalInfo
+      additionalInfo,
+      disabled
     } = this.state;
 
     const pages = [
-      <SiteInfo navigation={this.props.navigation} siteInfo={siteInfo} />,
-      <WorkingHours workingHours={workingHours} />,
-      <Risks risksGeneral={risksGeneral} />,
-      <PPE ppe={ppe} />,
+      <SiteInfo
+        navigation={this.props.navigation}
+        siteInfo={siteInfo}
+        disabled={disabled}
+      />,
+      <WorkingHours
+        workingHours={workingHours}
+        navigation={this.props.navigation}
+        disabled={disabled}
+      />,
+      <Risks
+        risksGeneral={risksGeneral}
+        navigation={this.props.navigation}
+        disabled={disabled}
+      />,
+      <PPE ppe={ppe} navigation={this.props.navigation} disabled={disabled} />,
       <HighRisk />,
       <Read
         navigation={this.props.navigation}
         additionalInfo={additionalInfo}
+        disabled={disabled}
+        submitChanges={this.submitChanges}
       />
     ];
 
+    console.log('disabled', this.state.disabled);
     return (
       <React.Fragment>
         {loading ? (
@@ -107,7 +140,7 @@ export default class SSRAScreen extends React.Component {
               sliderWidth={SCREEN_WIDTH}
               itemWidth={SCREEN_WIDTH}
               onSnapToItem={index => this.setState({ activeSlide: index })}
-              renderItem={({ item }) => (
+              renderItem={({ item, index }) => (
                 <View
                   style={{
                     flex: 1,

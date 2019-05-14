@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import MapView, { Polygon } from 'react-native-maps';
 import Communications from 'react-native-communications';
-import AddIcon from '../components/AddIcon';
 import styled from 'styled-components';
 import { Input, Button, Icon } from 'react-native-elements';
 import { fetchMapBySiteId } from '../api';
@@ -19,15 +18,9 @@ export default class MapScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: 'Map'
-      // headerRight: (
-      //   <TouchableOpacity onPress={navigation.getParam('addJob')}>
-      //     <View>
-      //       <AddIcon />
-      //     </View>
-      //   </TouchableOpacity>
-      // )
     };
   };
+
   state = {
     boundary: [
       { latitude: 53.798332, longitude: -1.558739 },
@@ -52,8 +45,17 @@ export default class MapScreen extends React.Component {
     this.setState({ loading: false, boundary: JSON.parse(map.coordinates) });
   };
   textNumberCheckIn = () => {
+    const {
+      navigation: {
+        state: { params }
+      }
+    } = this.props;
+
     if (!this.state.checkedIn) {
-      Communications.text('', "Hi I'm on site #TishsAngels");
+      Communications.text(
+        `0${params.pm_number}`,
+        "Hi I'm on site #TishsAngels"
+      );
       this.setState({ checkedIn: true });
     } else {
       this.setState({ failedCheckIn: true });
@@ -61,7 +63,15 @@ export default class MapScreen extends React.Component {
   };
 
   textNumberCheckOut = () => {
-    Communications.text('', "Hi I'm leaving site #TishsAngels");
+    const {
+      navigation: {
+        state: { params }
+      }
+    } = this.props;
+    Communications.text(
+      `0${params.pm_number}`,
+      "Hi I'm leaving site #TishsAngels"
+    );
     this.setState({ checkedOut: true });
   };
 
@@ -74,8 +84,7 @@ export default class MapScreen extends React.Component {
   };
 
   render() {
-    console.log(this.state);
-    const { loading } = this.state;
+    const { loading, checkedIn } = this.state;
     return (
       <React.Fragment>
         {loading ? (
@@ -117,23 +126,27 @@ export default class MapScreen extends React.Component {
                 <Button
                   onPress={this.textNumberCheckIn}
                   title="On Site"
-                  
-                  color="#9a9ce8"
+                  buttonStyle={{
+                    backgroundColor: '#696eb5',
+                    borderWidth: 2,
+                    borderColor: '#696eb5'
+                  }}
+                  disabled={checkedIn ? true : false}
+                  titleStyle={{ fontWeight: 'bold' }}
                   accessibilityLabel="Learn more about this purple button"
                 />
                 <Text>{'\n'}</Text>
                 <Button
                   onPress={this.textNumberCheckOut}
                   title="Off Site"
-                  
-                  color="#9a9ce8"
-                    accessibilityLabel="Learn more about this purple button"
-                    buttonStyle={{
-                      backgroundColor: '#9a9ce8',
-                      borderWidth: 2,
-                      // borderColor: 'black',
-                      // borderRadius: 15
-                    }}
+                  accessibilityLabel="Learn more about this purple button"
+                  buttonStyle={{
+                    backgroundColor: '#696eb5',
+                    borderWidth: 2,
+                    borderColor: '#696eb5'
+                  }}
+                  disabled={checkedIn ? false : true}
+                  titleStyle={{ fontWeight: 'bold' }}
                 />
               </View>
             ) : (
@@ -149,22 +162,39 @@ export default class MapScreen extends React.Component {
             )}
           </View>
         ) : (
-          // </View>
           <View style={styles.container}>
-            <Text>
-              You have checked out. Did you come across anything that needs to
-              be added to the risk assessment?
-            </Text>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('SSRA')}
-            >
-              <Text>Yes</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Home')}
-            >
-              <Text>No</Text>
-            </TouchableOpacity>
+            <Container>
+              <Content>
+                <Name>
+                  You have checked out. Did you come across anything that needs
+                  to be added to the risk assessment?
+                </Name>
+              </Content>
+            </Container>
+            <View style={styles.checkoutButtons}>
+              <Button
+                title="Yes"
+                onPress={() =>
+                  this.props.navigation.navigate('SSRA', { makeChange: true })
+                }
+                buttonStyle={{
+                  backgroundColor: '#696eb5',
+                  borderWidth: 2,
+                  borderColor: '#696eb5'
+                }}
+                titleStyle={{ fontWeight: 'bold' }}
+              />
+              <Button
+                title="No"
+                onPress={() => this.props.navigation.navigate('Home')}
+                buttonStyle={{
+                  backgroundColor: '#696eb5',
+                  borderWidth: 2,
+                  borderColor: '#696eb5'
+                }}
+                titleStyle={{ fontWeight: 'bold' }}
+              />
+            </View>
           </View>
         )}
       </React.Fragment>
@@ -195,8 +225,35 @@ const styles = StyleSheet.create({
     height: 100,
     position: 'absolute',
     bottom: '3%'
+  },
+  checkoutButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignContent: 'space-around',
+    width: SCREEN_WIDTH,
+    height: 100,
+    padding: 10
   }
 });
+
+const Container = styled.View`
+  background: #fff;
+  height: 100px;
+  width: ${SCREEN_WIDTH - 50};
+  border-radius: 14px;
+  margin-top: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Name = styled.Text`
+  font-size: 15px;
+  color: #3c4560;
+  font-weight: bold;
+  margin-bottom: 5px;
+  padding: 5px;
+`;
 
 const Content = styled.View`
   padding: 10px;
