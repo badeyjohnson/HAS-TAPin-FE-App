@@ -3,19 +3,12 @@ import {
   Dimensions,
   Text,
   ScrollView,
-  Switch,
   View,
   StyleSheet,
-  Picker,
   TextInput
 } from 'react-native';
 import styled from 'styled-components';
-import RNPickerSelect from 'react-native-picker-select';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
+import RadioForm from 'react-native-simple-radio-button';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -23,18 +16,19 @@ export default class JobsScreen extends React.Component {
   state = {
     checkboxes: [],
     loading: true,
-    disabled: false
+    disabled: true
   };
 
   componentDidMount = () => {
-    // api call
-    const questions = [
-      'Is there any potential for slips / trips / falls (open holes / steep slopes etc.)?',
-      'Are there any utilities/services in the local vicinity that may affect the work being undertaken? Consider whether a utilities survey is required.',
-      'Could there be other activities on site that could impact on the health, safety and/or wellbeing of staff visiting site, e.g. excavations, demolition, moving vehicles, farm activities, interaction with members of public etc.?'
-    ];
-    const checkboxes = questions.map((option, i) => {
-      return { id: i, key: option, value: 'Y', risk: 'L' };
+    const { risksGeneral } = this.props;
+    const checkboxes = risksGeneral.map((option, i) => {
+      return {
+        id: i,
+        key: option.question,
+        value: option.answer,
+        risk: option.risk,
+        mitigate: option.mitigation_Measures
+      };
     });
     this.setState({ checkboxes, loading: false });
   };
@@ -66,7 +60,7 @@ export default class JobsScreen extends React.Component {
       },
       {
         label: 'N/A',
-        value: 'na'
+        value: 'N/A'
       }
     ];
     const levels = [
@@ -81,6 +75,10 @@ export default class JobsScreen extends React.Component {
       {
         label: 'High',
         value: 'H'
+      },
+      {
+        label: 'N/A',
+        value: 'N/A'
       }
     ];
     return (
@@ -121,15 +119,23 @@ export default class JobsScreen extends React.Component {
                           multiline={true}
                           editable={disabled}
                           style={styles.mitigate}
-                          value={'many, many things need to happen'}
+                          value={
+                            item.mitigate
+                              ? item.mitigate
+                              : 'N/A'
+                          }
                         />
                         <Text>{'\n'}</Text>
                         <Caption>Residual Risk Level: </Caption>
                         <RadioForm
                           radio_props={levels}
-                          initial={levels.findIndex(
-                            level => level.value === item.risk
-                          )}
+                          initial={
+                            item.risk
+                              ? levels.findIndex(
+                                  level => level.value === item.risk
+                                )
+                              : 3
+                          }
                           formHorizontal={true}
                           labelHorizontal={false}
                           buttonColor={'#394385'}
@@ -141,7 +147,6 @@ export default class JobsScreen extends React.Component {
                         />
                       </Content>
                     )}
-
                     <Text>{'\n'}</Text>
                   </View>
                 );
@@ -169,7 +174,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 2,
     borderColor: '#394385',
-    borderRadius: 4,
+    borderRadius: 4
   },
   measureContain: {
     flex: 1,

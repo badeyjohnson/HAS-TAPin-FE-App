@@ -7,7 +7,14 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const Card = ({ item, navigation }) => (
   <Container>
-    <TouchableOpacity onPress={() => navigation.navigate('SSRA', '')}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('SSRA', {
+          SSRAid: item.site_specific_id,
+          site_id: item.site_id
+        })
+      }
+    >
       <Content>
         <Titlebar>
           <Avatar source={require('../images/avatar.png')} />

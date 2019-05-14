@@ -33,8 +33,14 @@ export const fetchSitesRisks = async siteId => {
   const {
     data: { riskAssessments }
   } = await axios.get(`${BASE_URL}sites/${siteId}/risk_assessments`);
-  // console.log('risk',riskAssessments)
   return riskAssessments;
+};
+
+export const fetchRiskAssessment = async (siteId, SSRAid) => {
+  const {
+    data: { riskAssessment }
+  } = await axios.get(`${BASE_URL}sites/${siteId}/${SSRAid}`);
+  return riskAssessment;
 };
 
 export const linkUserToJob = async (user, jobNo) => {

@@ -65,7 +65,7 @@ export default class JobsScreen extends React.Component {
   }
   render() {
     const { jobDetails, siteDetails, loading } = this.state;
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <React.Fragment>
         {loading ? (

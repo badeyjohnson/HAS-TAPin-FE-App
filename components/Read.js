@@ -17,7 +17,8 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class JobsScreen extends React.Component {
   state = {
-    loading: true
+    loading: true,
+    disabled: true
   };
 
   componentDidMount = () => {
@@ -25,8 +26,12 @@ export default class JobsScreen extends React.Component {
   };
 
   render() {
-    const { navigation } = this.props;
-    const { loading } = this.state;
+    const {
+      navigation,
+      additionalInfo: [additionalInfo]
+    } = this.props;
+    const { loading, disabled } = this.state;
+    console.log(additionalInfo);
     return (
       <React.Fragment>
         {loading ? (
@@ -60,6 +65,19 @@ export default class JobsScreen extends React.Component {
                   See the Minimum Health and Safety Requirements on Site for
                   further details.
                 </Caption>
+                <Content>
+                  <Name>Additional Info</Name>
+                  <TextInput
+                    multiline={true}
+                    editable={disabled}
+                    style={styles.mitigate}
+                    value={
+                      additionalInfo.multi_option
+                        ? additionalInfo.multi_option
+                        : 'N/A'
+                    }
+                  />
+                </Content>
                 <Caption> </Caption>
                 <Name>
                   YOU ARE EMPOWERED TO SAY NO IF YOU JUDGE THE CONDITIONS TO BE

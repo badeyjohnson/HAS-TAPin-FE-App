@@ -3,19 +3,11 @@ import {
   Dimensions,
   Text,
   ScrollView,
-  Switch,
   View,
   StyleSheet,
-  Picker,
   TextInput
 } from 'react-native';
 import styled from 'styled-components';
-import RNPickerSelect from 'react-native-picker-select';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -27,14 +19,9 @@ export default class JobsScreen extends React.Component {
   };
 
   componentDidMount = () => {
-    // api call
-    const questions = [
-      'Mode of travel (car, train etc.)',
-      'Estimated travel time to site',
-      'Estimated time on site'
-    ];
-    const checkboxes = questions.map((option, i) => {
-      return { id: i, key: option, value: 'Y', risk: 'L' };
+    const { workingHours } = this.props;
+    const checkboxes = workingHours.map((option, i) => {
+      return { id: i, key: option.question, value: option.multi_option };
     });
     this.setState({ checkboxes, loading: false });
   };
@@ -80,7 +67,7 @@ export default class JobsScreen extends React.Component {
                         multiline={true}
                         editable={disabled}
                         style={styles.mitigate}
-                        value={'many, many things need to happen'}
+                        value={item.value ? item.value :'N/A'}
                       />
                     </Content>
                     <Text>{'\n'}</Text>
