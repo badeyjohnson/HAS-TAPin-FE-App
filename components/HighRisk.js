@@ -1,21 +1,6 @@
 import React from 'react';
-import {
-  Dimensions,
-  Text,
-  ScrollView,
-  Switch,
-  View,
-  StyleSheet,
-  Picker,
-  TextInput
-} from 'react-native';
+import { Dimensions, Text, ScrollView, StyleSheet } from 'react-native';
 import styled from 'styled-components';
-import RNPickerSelect from 'react-native-picker-select';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 

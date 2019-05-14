@@ -18,7 +18,10 @@ export default class JobsScreen extends React.Component {
   };
 
   componentDidMount = () => {
-    // api call
+    const {
+      ppe: [ppe]
+    } = this.props;
+    const required = JSON.parse(ppe.multi_option);
     const options = [
       'Safety helmet',
       'Safety boots',
@@ -41,12 +44,15 @@ export default class JobsScreen extends React.Component {
       'Head torch + spare batteries',
       'Four-point chin strap'
     ];
-    
     const checkboxes = options.map((option, i) => {
       return { id: i, key: option, checked: false };
     });
+    checkboxes.forEach(item => {
+      if (required.includes(item.key)) item.checked = true;
+    });
     this.setState({ checkboxes, loading: false });
   };
+
   onCheckChanged(id) {
     const { checkboxes } = this.state;
     const index = checkboxes.findIndex(x => x.id === id);
