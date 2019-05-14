@@ -31,7 +31,6 @@ export default class JobsScreen extends React.Component {
       additionalInfo: [additionalInfo]
     } = this.props;
     const { loading, disabled } = this.state;
-    console.log(additionalInfo);
     return (
       <React.Fragment>
         {loading ? (
@@ -88,7 +87,7 @@ export default class JobsScreen extends React.Component {
                   title="GO TO MAP"
                   activeOpacity={1}
                   underlayColor="transparent"
-                  onPress={() => navigation.navigate('Map')}
+                    onPress={() => navigation.navigate('Map', additionalInfo)}
                   loadingProps={{ size: 'small', color: 'white' }}
                   buttonStyle={{
                     height: 50,

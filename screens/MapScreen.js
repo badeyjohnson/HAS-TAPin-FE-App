@@ -1,22 +1,31 @@
 import React from 'react';
-import { Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-// import { Constants, MapView, Location, Permissions } from 'expo';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions
+} from 'react-native';
 import MapView, { Polygon } from 'react-native-maps';
 import Communications from 'react-native-communications';
 import AddIcon from '../components/AddIcon';
+import styled from 'styled-components';
+import { Input, Button, Icon } from 'react-native-elements';
+import { fetchMapBySiteId } from '../api';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class MapScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: 'Map',
-      headerRight: (
-        <TouchableOpacity onPress={navigation.getParam('addJob')}>
-          <View>
-            <AddIcon />
-          </View>
-        </TouchableOpacity>
-      )
+      headerTitle: 'Map'
+      // headerRight: (
+      //   <TouchableOpacity onPress={navigation.getParam('addJob')}>
+      //     <View>
+      //       <AddIcon />
+      //     </View>
+      //   </TouchableOpacity>
+      // )
     };
   };
   state = {
@@ -29,14 +38,22 @@ export default class MapScreen extends React.Component {
     checkedIn: false,
     failedCheckIn: false,
     checkedOut: false,
-    LRBVisability: false
+    LRBVisability: false,
+    loading: false
+  };
+
+  componentDidMount = async () => {
+    const {
+      navigation: {
+        state: { params }
+      }
+    } = this.props;
+    const [map] = await fetchMapBySiteId(params.site_id);
+    this.setState({ loading: false, boundary: JSON.parse(map.coordinates) });
   };
   textNumberCheckIn = () => {
     if (!this.state.checkedIn) {
-      Communications.text(
-        '',
-        'seeing if this react native communications thing works for texts #TishsAngels'
-      );
+      Communications.text('', "Hi I'm on site #TishsAngels");
       this.setState({ checkedIn: true });
     } else {
       this.setState({ failedCheckIn: true });
@@ -44,7 +61,7 @@ export default class MapScreen extends React.Component {
   };
 
   textNumberCheckOut = () => {
-    Communications.text('', 'Job done #TishsAngels');
+    Communications.text('', "Hi I'm leaving site #TishsAngels");
     this.setState({ checkedOut: true });
   };
 
@@ -57,80 +74,100 @@ export default class MapScreen extends React.Component {
   };
 
   render() {
-    return !this.state.checkedOut ? (
-      <View style={styles.container}>
-        <MapView
-          style={{ alignSelf: 'stretch', flex: 0.8 }}
-          region={{
-            latitude:
-              this.state.boundary.reduce(
-                (sum, current) => sum + current.latitude,
-                0
-              ) / this.state.boundary.length,
-            longitude:
-              this.state.boundary.reduce(
-                (sum, current) => sum + current.longitude,
-                0
-              ) / this.state.boundary.length,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }}
-          showsUserLocation={true}
-        >
-          <Polygon
-            strokeWidth={1}
-            strokeColor={'#b642f4'}
-            // use a rgba instead for fill color
-            fillColor={'#d59ff2'}
-            coordinates={this.state.boundary}
-          />
-        </MapView>
-        <View style={{ flex: 0.2 }}>
-          {!this.state.failedCheckIn ? (
-            <View>
-              <Button
-                onPress={this.textNumberCheckIn}
-                title="On Site"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
+    console.log(this.state);
+    const { loading } = this.state;
+    return (
+      <React.Fragment>
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : !this.state.checkedOut ? (
+          <View style={styles.container}>
+            <MapView
+              style={{
+                alignSelf: 'stretch',
+                flex: 1,
+                alignItems: 'stretch'
+              }}
+              region={{
+                latitude:
+                  this.state.boundary.reduce(
+                    (sum, current) => sum + current.latitude,
+                    0
+                  ) / this.state.boundary.length,
+                longitude:
+                  this.state.boundary.reduce(
+                    (sum, current) => sum + current.longitude,
+                    0
+                  ) / this.state.boundary.length,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421
+              }}
+              showsUserLocation={true}
+            >
+              <Polygon
+                strokeWidth={1}
+                strokeColor={'#696eb5'}
+                fillColor={'rgba(155, 158, 232, 0.34)'}
+                coordinates={this.state.boundary}
               />
-              <Button
-                onPress={this.textNumberCheckOut}
-                title="Off Site"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-              />
-            </View>
-          ) : (
-            <View>
-              <Text>You have already checked in</Text>
-              <TouchableOpacity onPress={() => this.resetFailedCheckIn}>
-                <Text>OK</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.resetCheckedIn}>
-                <Text>Re-check in</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      </View>
-    ) : (
-      <View style={styles.container}>
-        <Text>
-          You have checked out. Did you come across anything that needs to be
-          added to the risk assessment?
-        </Text>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('SSRA')}
-        >
-          <Text>Yes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('Home')}
-        >
-          <Text>No</Text>
-        </TouchableOpacity>
-      </View>
+            </MapView>
+            {/* <View style={{ flex: 0 }}> */}
+            {!this.state.failedCheckIn ? (
+              <View style={styles.buttons}>
+                <Button
+                  onPress={this.textNumberCheckIn}
+                  title="On Site"
+                  
+                  color="#9a9ce8"
+                  accessibilityLabel="Learn more about this purple button"
+                />
+                <Text>{'\n'}</Text>
+                <Button
+                  onPress={this.textNumberCheckOut}
+                  title="Off Site"
+                  
+                  color="#9a9ce8"
+                    accessibilityLabel="Learn more about this purple button"
+                    buttonStyle={{
+                      backgroundColor: '#9a9ce8',
+                      borderWidth: 2,
+                      // borderColor: 'black',
+                      // borderRadius: 15
+                    }}
+                />
+              </View>
+            ) : (
+              <View>
+                <Text>You have already checked in</Text>
+                <TouchableOpacity onPress={() => this.resetFailedCheckIn}>
+                  <Text>OK</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.resetCheckedIn}>
+                  <Text>Re-check in</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        ) : (
+          // </View>
+          <View style={styles.container}>
+            <Text>
+              You have checked out. Did you come across anything that needs to
+              be added to the risk assessment?
+            </Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('SSRA')}
+            >
+              <Text>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Home')}
+            >
+              <Text>No</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </React.Fragment>
     );
   }
 }
@@ -149,5 +186,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#34495e'
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignContent: 'space-around',
+    width: SCREEN_WIDTH,
+    height: 100,
+    position: 'absolute',
+    bottom: '3%'
   }
 });
+
+const Content = styled.View`
+  padding: 10px;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+`;

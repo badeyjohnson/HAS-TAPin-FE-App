@@ -17,7 +17,7 @@ const RootStack = createStackNavigator(
     Submit: SubmitScreen
   },
   {
-    initialRouteName: 'SignIn',
+    initialRouteName: 'Map',
 
     // sets the default header styling for all routes
     defaultNavigationOptions: {

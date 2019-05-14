@@ -43,6 +43,13 @@ export const fetchRiskAssessment = async (siteId, SSRAid) => {
   return riskAssessment;
 };
 
+export const fetchMapBySiteId = async (siteId) => {
+  const {
+    data: { map }
+  } = await axios.get(`${BASE_URL}maps/${siteId}`);
+  return map;
+};
+
 export const linkUserToJob = async (user, jobNo) => {
   const { data } = await axios.post(`${BASE_URL}users/${user}/jobs/link`, {
     job_no: jobNo
