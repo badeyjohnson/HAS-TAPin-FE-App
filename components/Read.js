@@ -17,8 +17,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class JobsScreen extends React.Component {
   state = {
-    loading: true,
-    disabled: true
+    loading: true
   };
 
   componentDidMount = () => {
@@ -27,10 +26,17 @@ export default class JobsScreen extends React.Component {
 
   render() {
     const {
+      submitChanges,
+      disabled,
       navigation,
+      navigation: {
+        state: {
+          params: { job }
+        }
+      },
       additionalInfo: [additionalInfo]
     } = this.props;
-    const { loading, disabled } = this.state;
+    const { loading } = this.state;
     return (
       <React.Fragment>
         {loading ? (
@@ -83,23 +89,48 @@ export default class JobsScreen extends React.Component {
                   UNSAFE
                 </Name>
                 <Caption> </Caption>
-                <Button
-                  title="GO TO MAP"
-                  activeOpacity={1}
-                  underlayColor="transparent"
-                    onPress={() => navigation.navigate('Map', additionalInfo)}
-                  loadingProps={{ size: 'small', color: 'white' }}
-                  buttonStyle={{
-                    height: 50,
-                    width: 250,
-                    backgroundColor: 'transparent',
-                    borderWidth: 2,
-                    borderColor: 'black',
-                    borderRadius: 30
-                  }}
-                  containerStyle={{ marginVertical: 10 }}
-                  titleStyle={{ fontWeight: 'bold', color: 'red' }}
-                />
+                {!disabled ? (
+                  <Button
+                    title="Submit Changes"
+                    activeOpacity={1}
+                    underlayColor="transparent"
+                    onPress={() => {
+                      submitChanges();
+                      this.props.navigation.navigate('Home');
+                    }}
+                    loadingProps={{ size: 'small', color: 'white' }}
+                    buttonStyle={{
+                      height: 50,
+                      width: 250,
+                      backgroundColor: 'transparent',
+                      borderWidth: 2,
+                      borderColor: 'black',
+                      borderRadius: 30
+                    }}
+                    containerStyle={{ marginVertical: 10 }}
+                    titleStyle={{ fontWeight: 'bold', color: 'green' }}
+                  />
+                ) : (
+                  <Button
+                    title="GO TO MAP"
+                    activeOpacity={1}
+                    underlayColor="transparent"
+                    onPress={() =>
+                      navigation.navigate('Map', { ...additionalInfo, ...job })
+                    }
+                    loadingProps={{ size: 'small', color: 'white' }}
+                    buttonStyle={{
+                      height: 50,
+                      width: 250,
+                      backgroundColor: 'transparent',
+                      borderWidth: 2,
+                      borderColor: 'black',
+                      borderRadius: 30
+                    }}
+                    containerStyle={{ marginVertical: 10 }}
+                    titleStyle={{ fontWeight: 'bold', color: 'red' }}
+                  />
+                )}
               </Content>
             </ScrollView>
           </React.Fragment>

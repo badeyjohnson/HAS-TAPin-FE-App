@@ -132,12 +132,29 @@ export default class HomeScreen extends React.Component {
               errorMessage={foundJob ? null : 'Job No. Not Found'}
             />
             <Text>{`\n`}</Text>
-            <Button title="Submit" onPress={this.handleAddJobSubmit} />
-            <Button
-              type="outline"
-              title="Cancel"
-              onPress={() => this.setState({ addJob: false })}
-            />
+            <View style={styles.buttons}>
+              <Button
+                title="Submit"
+                onPress={this.handleAddJobSubmit}
+                buttonStyle={{
+                  backgroundColor: '#394385',
+                  borderWidth: 2,
+                  borderColor: '#394385'
+                }}
+                titleStyle={{ fontWeight: 'bold' }}
+              />
+              <Button
+                buttonStyle={{
+                  backgroundColor: 'transparent',
+                  borderWidth: 2,
+                  borderColor: '#394385'
+                }}
+                type="outline"
+                title="Cancel"
+                titleStyle={{ fontWeight: 'bold', color: 'black' }}
+                onPress={() => this.setState({ addJob: false })}
+              />
+            </View>
           </React.Fragment>
         </Overlay>
       </React.Fragment>
@@ -164,6 +181,12 @@ const styles = StyleSheet.create({
     width: 200,
     borderColor: '#7a42f4',
     borderWidth: 1
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignContent: 'space-around',
+    width: SCREEN_WIDTH
   }
 });
 

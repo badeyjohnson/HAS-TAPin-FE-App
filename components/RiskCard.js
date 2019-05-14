@@ -5,13 +5,14 @@ import dateConverter from '../utils/utils';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const Card = ({ item, navigation }) => (
+const Card = ({ item, navigation, jobDetails }) => (
   <Container>
     <TouchableOpacity
       onPress={() =>
         navigation.navigate('SSRA', {
           SSRAid: item.site_specific_id,
-          site_id: item.site_id
+          site_id: item.site_id,
+          job: jobDetails
         })
       }
     >

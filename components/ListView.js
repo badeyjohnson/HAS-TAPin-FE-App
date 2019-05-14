@@ -15,13 +15,17 @@ const styles = StyleSheet.create({
   }
 });
 
-const ListView = ({ itemList, navigation, parent }) => (
+const ListView = ({ itemList, navigation, parent, jobDetails }) => (
   <View style={styles.container}>
     {parent === 'Job' ? (
       <FlatList
         data={itemList}
         renderItem={({ item }) => (
-          <RiskCard item={item} navigation={navigation} />
+          <RiskCard
+            item={item}
+            navigation={navigation}
+            jobDetails={jobDetails}
+          />
         )}
         keyExtractor={item => `list-item-${item.site_id}`}
       />

@@ -31,7 +31,7 @@ export default class SignInScreen extends React.Component {
   };
   state = {
     email: 'tish.richardson@arup.com',
-    password: 'tish123',
+    password: 'tish1234',
     isLoading: false,
     isEmailValid: true,
     isPasswordValid: true
@@ -40,7 +40,6 @@ export default class SignInScreen extends React.Component {
   login = () => {
     const { email, password, isEmailValid, isPasswordValid } = this.state;
     this.setState({ isLoading: true });
-    // API call
     setTimeout(() => {
       LayoutAnimation.easeInEaseOut();
       this.setState(

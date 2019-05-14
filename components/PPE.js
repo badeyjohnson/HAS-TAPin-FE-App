@@ -13,8 +13,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class JobsScreen extends React.Component {
   state = {
-    loading: true,
-    disabled: true
+    loading: true
   };
 
   componentDidMount = () => {
@@ -61,7 +60,8 @@ export default class JobsScreen extends React.Component {
   }
 
   render() {
-    const { checkboxes, loading, disabled } = this.state;
+    const { disabled } = this.props;
+    const { checkboxes, loading } = this.state;
     return (
       <React.Fragment>
         {loading ? (
