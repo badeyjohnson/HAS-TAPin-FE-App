@@ -7,6 +7,7 @@ import SiteInfo from '../components/SiteInfo';
 import HighRisk from '../components/HighRisk';
 import Read from '../components/Read';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { answerConvertor, riskLevelConvertor } from '../utils/utils';
 import { fetchRiskAssessment, updateRiskAssessment } from '../api';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -19,7 +20,7 @@ export default class SSRAScreen extends React.Component {
   state = {
     activeSlide: 0,
     loading: true,
-    disabled: false,
+    disabled: true,
     siteInfoUpdates: {},
     workingHoursUpdates: {},
     risksUpdates: {},
@@ -217,13 +218,21 @@ export default class SSRAScreen extends React.Component {
       if (info.checked) ppeUpdate.push(info.key);
     });
 
-    console.log(risksUpdates);
     const risks = risksGeneral.map(info => {
       return {
         question_id: info.question_id,
-        risk: info.risk,
-        answer: info.answer,
-        mitigation_Measures: info.mitigation_Measures
+        risk_level:
+          risksUpdates[info.question_id].risk.length > 0
+            ? riskLevelConvertor(risksUpdates[info.question_id].risk)
+            : riskLevelConvertor(info.risk),
+        answers_options:
+          risksUpdates[info.question_id].answer.length > 0
+            ? answerConvertor(risksUpdates[info.question_id].answer)
+            : answerConvertor(info.answer),
+        mitigation_Measures:
+          risksUpdates[info.question_id].mitigate.length > 0
+            ? risksUpdates[info.question_id].mitigate
+            : info.mitigation_Measures
       };
     });
 
@@ -243,9 +252,10 @@ export default class SSRAScreen extends React.Component {
         addt
       ]
     };
-    // updateRiskAssessment(site_id, update);
+
+    console.log(update);
+    updateRiskAssessment(site_id, update);
   };
-  // {email: '', response: [{question_id: 1, answers_options: '', mitigation_Measures: '', risk_level: '', multi_option: ''}, {question_id: 2, ...}, }"
 
   render() {
     const {

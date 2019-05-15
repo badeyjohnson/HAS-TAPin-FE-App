@@ -105,7 +105,7 @@ export default class JobsScreen extends React.Component {
                       disabled={disabled}
                     />
                     {item.value === 'Y' ||
-                    risksUpdates[item.id]['answer'] === 'Y' ? (
+                    risksUpdates[item.id].answer === 'Y' ? (
                       <Content>
                         <Caption>Mitigation Measures: </Caption>
                         <TextInput
