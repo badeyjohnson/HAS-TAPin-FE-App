@@ -5,7 +5,7 @@ import {
   ScrollView,
   View,
   StyleSheet,
-  TextInput
+  TextInput, ActivityIndicator
 } from 'react-native';
 import styled from 'styled-components';
 
@@ -38,7 +38,9 @@ export default class JobsScreen extends React.Component {
     return (
       <React.Fragment>
         {loading ? (
-          <Text>loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <Container>
@@ -107,6 +109,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     width: SCREEN_WIDTH - 50
+  }, loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
   }
 });
 
@@ -124,7 +133,7 @@ const Container = styled.View`
 `;
 
 const Titlebar = styled.View`
-  width: 100%;
+  width: 90%;
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 5px;
@@ -136,7 +145,6 @@ const Titlebar = styled.View`
 
 const Content = styled.View`
   padding-bottom: 10px;
-  flex-direction: column;
   align-items: center;
   align-content: center;
   justify-content: center;

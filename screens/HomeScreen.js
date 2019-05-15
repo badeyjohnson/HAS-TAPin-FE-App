@@ -5,7 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   Dimensions,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 import {
   Overlay,
@@ -36,6 +37,7 @@ export default class HomeScreen extends React.Component {
     };
   };
   state = {
+    loading: true,
     jobNumber: '',
     foundJob: true,
     addJob: false,
@@ -50,7 +52,7 @@ export default class HomeScreen extends React.Component {
     const jobs = returned.map(job => {
       return { jNum: job.job_no, jName: job.job_name };
     });
-    this.setState({ jobs });
+    this.setState({ jobs, loading: false });
   };
   handleAddJob = () => {
     this.setState({ addJob: true });
@@ -76,9 +78,13 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { foundJob, jobNumber } = this.state;
+    const { foundJob, jobNumber, loading } = this.state;
     const email = navigation.getParam('email', '');
-    return (
+    return loading ? (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#9a9ce8" />
+      </View>
+    ) : (
       <React.Fragment>
         <Titlebar>
           <Avatar source={require('../images/avatar.png')} />
@@ -186,6 +192,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignContent: 'space-around',
+    width: SCREEN_WIDTH
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
     width: SCREEN_WIDTH
   }
 });

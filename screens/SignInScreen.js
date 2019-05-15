@@ -219,15 +219,12 @@ const styles = StyleSheet.create({
   loginView: {
     flex: 1,
     marginBottom: 125,
-    // backgroundColor: 'blue',
     width: 250
-    // height: 400,
-    // justifyContent: 'flex-start',
   },
   loginTitle: {
     flex: 1,
     alignItems: 'center',
-    // backgroundColor: 'yellow',
+
     justifyContent: 'center',
     width: 250,
     height: 300,
@@ -237,5 +234,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start'
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
   }
 });

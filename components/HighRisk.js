@@ -1,45 +1,32 @@
 import React from 'react';
-import { Dimensions, Text, ScrollView, StyleSheet } from 'react-native';
+import {
+  Dimensions,
+  Text,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator
+} from 'react-native';
 import styled from 'styled-components';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class JobsScreen extends React.Component {
   state = {
-    checkboxes: [],
-    loading: true,
-    disabled: false
+    loading: true
   };
 
   componentDidMount = () => {
-    // api call
-    const questions = ['Site description', 'Date of site visit'];
-    const checkboxes = questions.map((option, i) => {
-      return { id: i, key: option, value: 'Y', risk: 'L' };
-    });
-    this.setState({ checkboxes, loading: false });
+    this.setState({ loading: false });
   };
 
-  onCheckChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].value = val;
-    this.setState(checkboxes);
-  }
-
-  onLevelChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].risk = val;
-    this.setState(checkboxes);
-  }
-
   render() {
-    const { checkboxes, loading, disabled } = this.state;
+    const { loading } = this.state;
     return (
       <React.Fragment>
         {loading ? (
-          <Text>loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <Container>
@@ -82,49 +69,33 @@ export default class JobsScreen extends React.Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
-  container: {
+  loader: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    width: SCREEN_WIDTH - 50,
-    flexDirection: 'column',
-    alignContent: 'center',
-    padding: 50
-  },
-  mitigate: {
-    fontSize: 14,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     padding: 10,
-    borderWidth: 2,
-    borderColor: '#394385',
-    borderRadius: 4
-  },
-  measureContain: {
-    flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    flexDirection: 'column',
-    width: SCREEN_WIDTH - 50
+    width: SCREEN_WIDTH
   }
 });
 
 const Container = styled.View`
   background: #fff;
-  height: 110px;
-  width: ${SCREEN_WIDTH - 50};
+  height: 115px;
+  width: ${SCREEN_WIDTH - 70};
   border-radius: 14px;
   margin: 10px;
   margin-top: 10px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  align-items: flex-start;
-  align-content: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
 `;
 
 const Titlebar = styled.View`
-  width: 100%;
+  width: 85%;
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 5px;

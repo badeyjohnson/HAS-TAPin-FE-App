@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from 'react-native';
 import MapView, { Polygon } from 'react-native-maps';
 import Communications from 'react-native-communications';
@@ -83,7 +84,9 @@ export default class MapScreen extends React.Component {
     return (
       <React.Fragment>
         {loading ? (
-          <Text>Loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : !this.state.checkedOut ? (
           <View style={styles.container}>
             <MapView
@@ -228,6 +231,14 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     height: 100,
     padding: 10
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
   }
 });
 

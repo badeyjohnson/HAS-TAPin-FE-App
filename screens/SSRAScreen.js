@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View, Text } from 'react-native';
+import { Dimensions, View, Text, ActivityIndicator } from 'react-native';
 import PPE from '../components/PPE';
 import Risks from '../components/RiskAssessment';
 import WorkingHours from '../components/WorkingHours';
@@ -20,7 +20,7 @@ export default class SSRAScreen extends React.Component {
   state = {
     activeSlide: 0,
     loading: true,
-    disabled: false,
+    disabled: true,
     siteInfoUpdates: {},
     workingHoursUpdates: {},
     risksUpdates: {},
@@ -239,7 +239,9 @@ export default class SSRAScreen extends React.Component {
     const addt = {
       question_id: 35,
       multi_option:
-        additionalInfoUpdate.length > 0 ? additionalInfoUpdate : additionalInfo
+        additionalInfoUpdate.length > 0
+          ? additionalInfoUpdate
+          : additionalInfo.multi_option
     };
 
     const update = {
@@ -253,7 +255,6 @@ export default class SSRAScreen extends React.Component {
       ]
     };
 
-    console.log(update);
     updateRiskAssessment(site_id, update);
   };
 
@@ -317,7 +318,9 @@ export default class SSRAScreen extends React.Component {
     return (
       <React.Fragment>
         {loading ? (
-          <Text>Loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <Carousel
@@ -345,3 +348,14 @@ export default class SSRAScreen extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
+  }
+});
