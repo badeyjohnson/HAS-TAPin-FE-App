@@ -168,23 +168,84 @@ export default class SSRAScreen extends React.Component {
     risksUpdates[id]['answer'] = val;
     this.setState(risksUpdates);
   };
-
   onLevelChanged = (val, id) => {
     const risksUpdates = { ...this.state.risksUpdates };
     risksUpdates[id]['risk'] = val;
     this.setState(risksUpdates);
   };
-
   submitChanges = () => {
     const {
       navigation: {
         state: {
-          params: { site_id }
+          params: { site_id, email }
         }
       }
     } = this.props;
-    updateRiskAssessment(site_id, update);
+    const {
+      additionalInfoUpdate,
+      additionalInfo,
+      siteInfo,
+      siteInfoUpdates,
+      workingHoursUpdates,
+      workingHours,
+      checkboxes,
+      risksGeneral,
+      risksUpdates
+    } = this.state;
+
+    const site = siteInfo.map(info => {
+      return {
+        question_id: info.question_id,
+        multi_option:
+          siteInfoUpdates[info.question_id].length > 0
+            ? siteInfoUpdates[info.question_id]
+            : info.multi_option
+      };
+    });
+    const working = workingHours.map(info => {
+      return {
+        question_id: info.question_id,
+        multi_option:
+          workingHoursUpdates[info.question_id].length > 0
+            ? workingHoursUpdates[info.question_id]
+            : info.multi_option
+      };
+    });
+
+    let ppeUpdate = [];
+    checkboxes.forEach(info => {
+      if (info.checked) ppeUpdate.push(info.key);
+    });
+
+    console.log(risksUpdates);
+    const risks = risksGeneral.map(info => {
+      return {
+        question_id: info.question_id,
+        risk: info.risk,
+        answer: info.answer,
+        mitigation_Measures: info.mitigation_Measures
+      };
+    });
+
+    const addt = {
+      question_id: 35,
+      multi_option:
+        additionalInfoUpdate.length > 0 ? additionalInfoUpdate : additionalInfo
+    };
+
+    const update = {
+      email,
+      response: [
+        ...site,
+        ...working,
+        ...risks,
+        { question_id: 34, multi_option: JSON.stringify(ppeUpdate) },
+        addt
+      ]
+    };
+    // updateRiskAssessment(site_id, update);
   };
+  // {email: '', response: [{question_id: 1, answers_options: '', mitigation_Measures: '', risk_level: '', multi_option: ''}, {question_id: 2, ...}, }"
 
   render() {
     const {
@@ -243,7 +304,6 @@ export default class SSRAScreen extends React.Component {
         additionalInfoUpdate={additionalInfoUpdate}
       />
     ];
-    console.log('risksUpdates', risksUpdates);
     return (
       <React.Fragment>
         {loading ? (

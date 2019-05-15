@@ -76,7 +76,7 @@ export default class JobsScreen extends React.Component {
                   <TextInput
                     multiline={true}
                     onChangeText={input => updateAdditionalInfo(input)}
-                    editable={disabled}
+                    editable={!disabled}
                     style={styles.mitigate}
                     keyboardAppearance={'light'}
                     value={additionalInfoUpdate}

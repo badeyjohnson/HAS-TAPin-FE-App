@@ -11,7 +11,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 export default class JobsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: navigation.state.params
+      headerTitle: navigation.state.params.title
     };
   };
 
@@ -24,7 +24,7 @@ export default class JobsScreen extends React.Component {
 
   componentDidMount = async () => {
     const { navigation } = this.props;
-    const jobNo = navigation.state.params;
+    const jobNo = navigation.state.params.title
     const jobDetails = await fetchJob(jobNo);
     const sites = await fetchSitesByJob(jobNo);
     const siteDetails = {};

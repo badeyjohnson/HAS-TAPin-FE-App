@@ -111,7 +111,7 @@ export default class JobsScreen extends React.Component {
                         <TextInput
                           onChangeText={input => updateRisks(input, item.id)}
                           multiline={true}
-                          editable={this.props.disabled}
+                          editable={!disabled}
                           value={risksUpdates[item.id].mitigate}
                           returnKeyType={'done'}
                           keyboardType={'default'}

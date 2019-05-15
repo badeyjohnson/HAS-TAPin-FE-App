@@ -61,14 +61,13 @@ export default class JobsScreen extends React.Component {
                           updateChangesWorkInfo(input, item.id)
                         }
                         multiline={true}
-                        editable={disabled}
+                        editable={!disabled}
                         style={styles.mitigate}
                         placeholder={item.value ? item.value : 'N/A'}
                         containerStyle={{ marginVertical: 10 }}
                         keyboardAppearance={'light'}
                         value={workingHoursUpdates[item.id]}
                         returnKeyType={'done'}
-                        editable={this.props.disabled}
                         keyboardType={'default'}
                         maxLength={40}
                       />

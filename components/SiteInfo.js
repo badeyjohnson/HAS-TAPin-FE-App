@@ -71,7 +71,7 @@ export default class JobsScreen extends React.Component {
                         containerStyle={{ marginVertical: 10 }}
                         style={styles.mitigate}
                         keyboardAppearance={'light'}
-                        editable={this.props.disabled}
+                        editable={!disabled}
                         value={siteInfoUpdates[item.id]}
                         returnKeyType={'done'}
                         keyboardType={'default'}

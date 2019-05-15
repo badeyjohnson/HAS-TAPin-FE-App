@@ -12,7 +12,8 @@ const Card = ({ item, navigation, jobDetails }) => (
         navigation.navigate('SSRA', {
           SSRAid: item.site_specific_id,
           site_id: item.site_id,
-          job: jobDetails
+          job: jobDetails,
+          email: navigation.state.params.email
         })
       }
     >
