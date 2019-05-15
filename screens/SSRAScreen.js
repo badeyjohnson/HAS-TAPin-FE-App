@@ -20,7 +20,7 @@ export default class SSRAScreen extends React.Component {
   state = {
     activeSlide: 0,
     loading: true,
-    disabled: true,
+    disabled: false,
     siteInfoUpdates: {},
     workingHoursUpdates: {},
     risksUpdates: {},
