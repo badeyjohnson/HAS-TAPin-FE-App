@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import axios from 'axios';
 
-const BASE_URL = `http://localhost:9090/api/`;
+const BASE_URL = `https://hastapin.appspot.com/api/`;
 
 export const fetchUser = async email => {
   const {
