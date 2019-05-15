@@ -104,7 +104,8 @@ export default class JobsScreen extends React.Component {
                       }
                       disabled={disabled}
                     />
-                    {item.value === 'Y' && (
+                    {item.value === 'Y' ||
+                    risksUpdates[item.id]['answer'] === 'Y' ? (
                       <Content>
                         <Caption>Mitigation Measures: </Caption>
                         <TextInput
@@ -139,7 +140,7 @@ export default class JobsScreen extends React.Component {
                           disabled={disabled}
                         />
                       </Content>
-                    )}
+                    ) : null}
                     <Text>{'\n'}</Text>
                   </View>
                 );

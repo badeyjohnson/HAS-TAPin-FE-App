@@ -19,7 +19,7 @@ export default class SSRAScreen extends React.Component {
   state = {
     activeSlide: 0,
     loading: true,
-    disabled: true,
+    disabled: false,
     siteInfoUpdates: {},
     workingHoursUpdates: {},
     risksUpdates: {},
@@ -60,7 +60,11 @@ export default class SSRAScreen extends React.Component {
     );
     const risksUpdates = { ...this.state.risksUpdates };
     risksGeneral.map(info => {
-      risksUpdates[`${info.question_id}`] = { mitigate: '' };
+      risksUpdates[`${info.question_id}`] = {
+        mitigate: '',
+        answer: '',
+        risk: ''
+      };
     });
     const ppe = sorted.filter(question => question.question_id === 34);
     const additionalInfo = sorted.filter(
@@ -159,19 +163,17 @@ export default class SSRAScreen extends React.Component {
     checkboxes[index].checked = !checkboxes[index].checked;
     this.setState(checkboxes);
   };
-  onChangeSelection(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].value = val;
-    this.setState(checkboxes);
-  }
+  onChangeSelection = (val, id) => {
+    const risksUpdates = { ...this.state.risksUpdates };
+    risksUpdates[id]['answer'] = val;
+    this.setState(risksUpdates);
+  };
 
-  onLevelChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].risk = val;
-    this.setState(checkboxes);
-  }
+  onLevelChanged = (val, id) => {
+    const risksUpdates = { ...this.state.risksUpdates };
+    risksUpdates[id]['risk'] = val;
+    this.setState(risksUpdates);
+  };
 
   submitChanges = () => {
     const {
@@ -221,6 +223,8 @@ export default class SSRAScreen extends React.Component {
         disabled={disabled}
         updateRisks={this.updateRisks}
         risksUpdates={risksUpdates}
+        onChangeSelection={this.onChangeSelection}
+        onLevelChanged={this.onLevelChanged}
       />,
       <PPE
         ppe={ppe}
