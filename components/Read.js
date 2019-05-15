@@ -3,10 +3,7 @@ import {
   Dimensions,
   Text,
   ScrollView,
-  Switch,
-  View,
   StyleSheet,
-  Picker,
   TextInput,
   Image
 } from 'react-native';
@@ -147,7 +144,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH - 50,
     flexDirection: 'column',
     alignContent: 'center',
-    padding: 50
+    padding: 50,
   },
   mitigate: {
     fontSize: 14,
@@ -169,7 +166,7 @@ const styles = StyleSheet.create({
 
 const Container = styled.View`
   background: #fff;
-  height: 110px;
+  height: 160px;
   width: ${SCREEN_WIDTH - 50};
   border-radius: 14px;
   margin: 10px;
@@ -192,7 +189,7 @@ const Titlebar = styled.View`
 `;
 
 const Content = styled.View`
-  padding: 50px;
+  padding: 20px;
   flex-direction: column;
   align-items: center;
   align-content: center;

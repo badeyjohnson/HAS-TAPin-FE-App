@@ -23,20 +23,17 @@ export default class SSRAScreen extends React.Component {
       navigation: {
         state: {
           params: { site_id, SSRAid },
-          params
+          
         }
       }
     } = this.props;
     this.props.navigation.addListener('didFocus', () => {
-      // console.log('ssra', this.props.navigation.state.params.makeChange);
       if (this.props.navigation.state.params.makeChange === true) {
         this.makeChange();
       }
-      // console.log('user has navigated to this screen');
     });
 
     this.props.navigation.addListener('didBlur', () => {
-      // console.log('user has navigated away from this screen');
     });
 
     const assessment = await fetchRiskAssessment(site_id, SSRAid);
@@ -127,7 +124,6 @@ export default class SSRAScreen extends React.Component {
       />
     ];
 
-    console.log('disabled', this.state.disabled);
     return (
       <React.Fragment>
         {loading ? (

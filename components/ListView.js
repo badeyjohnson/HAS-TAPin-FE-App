@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, Text, Dimensions } from 'react-native';
-import Card from './Card';
+import { View, FlatList, StyleSheet, Dimensions } from 'react-native';
 import RiskCard from './RiskCard';
+import Card from './Card';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
