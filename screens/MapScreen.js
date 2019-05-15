@@ -22,17 +22,12 @@ export default class MapScreen extends React.Component {
   };
 
   state = {
-    boundary: [
-      { latitude: 53.798332, longitude: -1.558739 },
-      { latitude: 53.798553, longitude: -1.530716 },
-      { latitude: 53.787372, longitude: -1.531405 },
-      { latitude: 53.788328, longitude: -1.558051 }
-    ],
+    boundary: [],
     checkedIn: false,
     failedCheckIn: false,
     checkedOut: false,
     LRBVisability: false,
-    loading: false
+    loading: true
   };
 
   componentDidMount = async () => {

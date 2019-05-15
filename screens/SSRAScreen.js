@@ -32,11 +32,11 @@ export default class SSRAScreen extends React.Component {
       if (this.props.navigation.state.params.makeChange === true) {
         this.makeChange();
       }
-      console.log('user has navigated to this screen');
+      // console.log('user has navigated to this screen');
     });
 
     this.props.navigation.addListener('didBlur', () => {
-      console.log('user has navigated away from this screen');
+      // console.log('user has navigated away from this screen');
     });
 
     const assessment = await fetchRiskAssessment(site_id, SSRAid);
