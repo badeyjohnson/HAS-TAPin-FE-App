@@ -23,6 +23,8 @@ export default class JobsScreen extends React.Component {
 
   render() {
     const {
+      updateAdditionalInfo,
+      additionalInfoUpdate,
       submitChanges,
       disabled,
       navigation,
@@ -33,7 +35,9 @@ export default class JobsScreen extends React.Component {
       },
       additionalInfo: [additionalInfo]
     } = this.props;
+
     const { loading } = this.state;
+
     return (
       <React.Fragment>
         {loading ? (
@@ -71,9 +75,15 @@ export default class JobsScreen extends React.Component {
                   <Name>Additional Info</Name>
                   <TextInput
                     multiline={true}
+                    onChangeText={input => updateAdditionalInfo(input)}
                     editable={disabled}
                     style={styles.mitigate}
-                    value={
+                    keyboardAppearance={'light'}
+                    value={additionalInfoUpdate}
+                    returnKeyType={'done'}
+                    keyboardType={'default'}
+                    maxLength={40}
+                    placeholder={
                       additionalInfo.multi_option
                         ? additionalInfo.multi_option
                         : 'N/A'
@@ -144,7 +154,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH - 50,
     flexDirection: 'column',
     alignContent: 'center',
-    padding: 50,
+    padding: 50
   },
   mitigate: {
     fontSize: 14,

@@ -27,7 +27,7 @@ const ListView = ({ itemList, navigation, parent, jobDetails }) => (
             jobDetails={jobDetails}
           />
         )}
-        keyExtractor={item => `list-item-${item.site_id}`}
+        keyExtractor={item => `list-item-${item.site_specific_id}`}
       />
     ) : (
       <FlatList
@@ -40,7 +40,7 @@ const ListView = ({ itemList, navigation, parent, jobDetails }) => (
             navigation={navigation}
           />
         )}
-        keyExtractor={item => `list-item-${item.jNum}`}
+        keyExtractor={item => `list-item-${item.created_at}`}
       />
     )}
   </View>

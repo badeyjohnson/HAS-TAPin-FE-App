@@ -8,40 +8,34 @@ import {
   TextInput
 } from 'react-native';
 import styled from 'styled-components';
+import { Input, Button, Icon } from 'react-native-elements';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class JobsScreen extends React.Component {
   state = {
-    checkboxes: [],
     loading: true
   };
 
   componentDidMount = () => {
-    const { siteInfo } = this.props;
-    const checkboxes = siteInfo.map((option, i) => {
-      return { id: i, key: option.question, value: option.multi_option };
-    });
-    this.setState({ checkboxes, loading: false });
+    this.setState({ loading: false });
   };
 
-  onCheckChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].value = val;
-    this.setState(checkboxes);
-  }
-
-  onLevelChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].risk = val;
-    this.setState(checkboxes);
-  }
-
   render() {
-    const { checkboxes, loading } = this.state;
-    const { disabled } = this.props;
+    const { loading } = this.state;
+    const {
+      siteInfo,
+      disabled,
+      siteInfoUpdates,
+      updateChangesSiteInfo
+    } = this.props;
+    const inputs = siteInfo.map((option, i) => {
+      return {
+        id: option.question_id,
+        key: option.question,
+        value: option.multi_option
+      };
+    });
     return (
       <React.Fragment>
         {loading ? (
@@ -63,16 +57,25 @@ export default class JobsScreen extends React.Component {
               </Titlebar>
             </Container>
             <ScrollView>
-              {checkboxes.map((item, key) => {
+              {inputs.map((item, i) => {
                 return (
-                  <View key={`view ${key}`} style={styles.container}>
-                    <Name key={`text ${key}`}>{item.key}</Name>
+                  <View key={`view ${i}`} style={styles.container}>
+                    <Name key={`text ${i}`}>{item.key}</Name>
                     <Content>
                       <TextInput
+                        onChangeText={input =>
+                          updateChangesSiteInfo(input, item.id)
+                        }
                         multiline={true}
-                        editable={disabled}
+                        placeholder={item.value? item.value : 'N/A'}
+                        containerStyle={{ marginVertical: 10 }}
                         style={styles.mitigate}
-                        value={item.value}
+                        keyboardAppearance={'light'}
+                        editable={this.props.disabled}
+                        value={siteInfoUpdates[item.id]}
+                        returnKeyType={'done'}
+                        keyboardType={'default'}
+                        maxLength={40}
                       />
                     </Content>
                     <Text>{'\n'}</Text>
