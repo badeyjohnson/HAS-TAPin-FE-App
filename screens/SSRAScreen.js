@@ -7,7 +7,7 @@ import SiteInfo from '../components/SiteInfo';
 import HighRisk from '../components/HighRisk';
 import Read from '../components/Read';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { fetchRiskAssessment } from '../api';
+import { fetchRiskAssessment, updateRiskAssessment } from '../api';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -16,49 +16,96 @@ export default class SSRAScreen extends React.Component {
     title: 'SSRA'
   };
 
-  state = { activeSlide: 0, loading: true, disabled: true };
+  state = {
+    activeSlide: 0,
+    loading: true,
+    disabled: true,
+    siteInfoUpdates: {},
+    workingHoursUpdates: {},
+    risksUpdates: {},
+    additionalInfoUpdate: ''
+  };
 
   componentDidMount = async () => {
     const {
       navigation: {
         state: {
-          params: { site_id, SSRAid },
-          params
+          params: { site_id, SSRAid }
         }
       }
     } = this.props;
+
     this.props.navigation.addListener('didFocus', () => {
-      // console.log('ssra', this.props.navigation.state.params.makeChange);
       if (this.props.navigation.state.params.makeChange === true) {
         this.makeChange();
       }
-      // console.log('user has navigated to this screen');
     });
-
-    this.props.navigation.addListener('didBlur', () => {
-      // console.log('user has navigated away from this screen');
-    });
-
+    this.props.navigation.addListener('didBlur', () => {});
     const assessment = await fetchRiskAssessment(site_id, SSRAid);
     const sorted = assessment.sort((a, b) => a.question_id - b.question_id);
     const siteInfo = sorted.filter(question => question.question_id <= 3);
+    const siteInfoUpdates = { ...this.state.siteInfoUpdates };
+    siteInfo.map(info => {
+      siteInfoUpdates[`${info.question_id}`] = '';
+    });
     const workingHours = sorted.filter(
-      question => question.question_id > 4 && question.question_id <= 10
+      question => question.question_id >= 4 && question.question_id <= 10
     );
+    const workingHoursUpdates = { ...this.state.siteInfoUpdates };
+    workingHours.map(info => {
+      workingHoursUpdates[`${info.question_id}`] = '';
+    });
     const risksGeneral = sorted.filter(
       question => question.question_id > 10 && question.question_id <= 33
     );
+    const risksUpdates = { ...this.state.risksUpdates };
+    risksGeneral.map(info => {
+      risksUpdates[`${info.question_id}`] = { mitigate: '' };
+    });
     const ppe = sorted.filter(question => question.question_id === 34);
     const additionalInfo = sorted.filter(
       question => question.question_id === 35
     );
+    const required = JSON.parse(ppe[0].multi_option);
+    const options = [
+      'Safety helmet',
+      'Safety boots',
+      'Safety wellington boots',
+      'Boiler suit / overalls',
+      'Gloves',
+      'High visibility trousers (Yellow)',
+      'High visibility jacket / vest (Yellow)',
+      'High visibility trousers (Orange)',
+      'High visibility jacket / vest (Orange)',
+      'Goggles / visor / safety glasses',
+      'Hearing protection (ear plugs)',
+      'Ear defenders (safety helmet)',
+      'First aid kit',
+      'Disinfectant hand wipes/gel',
+      'Respiratory protection',
+      'Mobile phone',
+      'Satellite phone',
+      'Torch + spare batteries',
+      'Head torch + spare batteries',
+      'Four-point chin strap'
+    ];
+    const checkboxes = options.map((option, i) => {
+      return { id: i, key: option, checked: false };
+    });
+    checkboxes.forEach(item => {
+      if (required.includes(item.key)) item.checked = true;
+    });
     this.setState({
       loading: false,
       siteInfo,
       workingHours,
       risksGeneral,
       ppe,
-      additionalInfo
+      additionalInfo,
+      siteInfoUpdates,
+      workingHoursUpdates,
+      checkboxes,
+      risksUpdates
     });
   };
 
@@ -83,12 +130,59 @@ export default class SSRAScreen extends React.Component {
       />
     );
   }
-
   makeChange = () => {
     this.setState({ disabled: false });
   };
+  updateChangesSiteInfo = (input, id) => {
+    this.setState({
+      siteInfoUpdates: { ...this.state.siteInfoUpdates, [id]: input }
+    });
+  };
+  updateChangesWorkInfo = (input, id) => {
+    this.setState({
+      workingHoursUpdates: { ...this.state.workingHoursUpdates, [id]: input }
+    });
+  };
+  updateRisks = (input, id) => {
+    const risksUpdates = { ...this.state.risksUpdates };
+    risksUpdates[id]['mitigate'] = input;
+    this.setState({ risksUpdates });
+  };
+  updateAdditionalInfo = input => {
+    this.setState({
+      additionalInfoUpdate: input
+    });
+  };
+  onCheckChanged = id => {
+    const { checkboxes } = this.state;
+    const index = checkboxes.findIndex(x => x.id === id);
+    checkboxes[index].checked = !checkboxes[index].checked;
+    this.setState(checkboxes);
+  };
+  onChangeSelection(val, id) {
+    const { checkboxes } = this.state;
+    const index = checkboxes.findIndex(x => x.id === id);
+    checkboxes[index].value = val;
+    this.setState(checkboxes);
+  }
 
-  submitChanges = () => {};
+  onLevelChanged(val, id) {
+    const { checkboxes } = this.state;
+    const index = checkboxes.findIndex(x => x.id === id);
+    checkboxes[index].risk = val;
+    this.setState(checkboxes);
+  }
+
+  submitChanges = () => {
+    const {
+      navigation: {
+        state: {
+          params: { site_id }
+        }
+      }
+    } = this.props;
+    updateRiskAssessment(site_id, update);
+  };
 
   render() {
     const {
@@ -98,7 +192,12 @@ export default class SSRAScreen extends React.Component {
       risksGeneral,
       ppe,
       additionalInfo,
-      disabled
+      disabled,
+      siteInfoUpdates,
+      risksUpdates,
+      workingHoursUpdates,
+      additionalInfoUpdate,
+      checkboxes
     } = this.state;
 
     const pages = [
@@ -106,28 +205,41 @@ export default class SSRAScreen extends React.Component {
         navigation={this.props.navigation}
         siteInfo={siteInfo}
         disabled={disabled}
+        updateChangesSiteInfo={this.updateChangesSiteInfo}
+        siteInfoUpdates={siteInfoUpdates}
       />,
       <WorkingHours
         workingHours={workingHours}
         navigation={this.props.navigation}
         disabled={disabled}
+        workingHoursUpdates={workingHoursUpdates}
+        updateChangesWorkInfo={this.updateChangesWorkInfo}
       />,
       <Risks
         risksGeneral={risksGeneral}
         navigation={this.props.navigation}
         disabled={disabled}
+        updateRisks={this.updateRisks}
+        risksUpdates={risksUpdates}
       />,
-      <PPE ppe={ppe} navigation={this.props.navigation} disabled={disabled} />,
+      <PPE
+        ppe={ppe}
+        navigation={this.props.navigation}
+        disabled={disabled}
+        checkboxes={checkboxes}
+        onCheckChanged={this.onCheckChanged}
+      />,
       <HighRisk />,
       <Read
         navigation={this.props.navigation}
         additionalInfo={additionalInfo}
         disabled={disabled}
         submitChanges={this.submitChanges}
+        updateAdditionalInfo={this.updateAdditionalInfo}
+        additionalInfoUpdate={additionalInfoUpdate}
       />
     ];
-
-    console.log('disabled', this.state.disabled);
+    console.log('risksUpdates', risksUpdates);
     return (
       <React.Fragment>
         {loading ? (

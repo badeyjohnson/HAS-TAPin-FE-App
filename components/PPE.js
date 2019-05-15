@@ -17,51 +17,12 @@ export default class JobsScreen extends React.Component {
   };
 
   componentDidMount = () => {
-    const {
-      ppe: [ppe]
-    } = this.props;
-    const required = JSON.parse(ppe.multi_option);
-    const options = [
-      'Safety helmet',
-      'Safety boots',
-      'Safety wellington boots',
-      'Boiler suit / overalls',
-      'Gloves',
-      'High visibility trousers (Yellow)',
-      'High visibility jacket / vest (Yellow)',
-      'High visibility trousers (Orange)',
-      'High visibility jacket / vest (Orange)',
-      'Goggles / visor / safety glasses',
-      'Hearing protection (ear plugs)',
-      'Ear defenders (safety helmet)',
-      'First aid kit',
-      'Disinfectant hand wipes/gel',
-      'Respiratory protection',
-      'Mobile phone',
-      'Satellite phone',
-      'Torch + spare batteries',
-      'Head torch + spare batteries',
-      'Four-point chin strap'
-    ];
-    const checkboxes = options.map((option, i) => {
-      return { id: i, key: option, checked: false };
-    });
-    checkboxes.forEach(item => {
-      if (required.includes(item.key)) item.checked = true;
-    });
-    this.setState({ checkboxes, loading: false });
+    this.setState({ loading: false });
   };
 
-  onCheckChanged(id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].checked = !checkboxes[index].checked;
-    this.setState(checkboxes);
-  }
-
   render() {
-    const { disabled } = this.props;
-    const { checkboxes, loading } = this.state;
+    const { disabled, checkboxes, onCheckChanged } = this.props;
+    const { loading } = this.state;
     return (
       <React.Fragment>
         {loading ? (
@@ -81,8 +42,8 @@ export default class JobsScreen extends React.Component {
                     <Switch
                       key={`switch ${key}`}
                       value={item.checked}
-                      onValueChange={() => this.onCheckChanged(item.id)}
-                      disabled={disabled}
+                      onValueChange={() => onCheckChanged(item.id)}
+                      disabled={false}
                     />
                     <Text>{'    '}</Text>
                     <Text key={`text ${key}`}>{item.key}</Text>
@@ -101,7 +62,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    // backgroundColor: 'green',
     width: SCREEN_WIDTH - 50,
     padding: 10,
     flexDirection: 'row',

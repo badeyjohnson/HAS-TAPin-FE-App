@@ -4,7 +4,6 @@ import {
   Text,
   Image,
   StyleSheet,
-  TextInput,
   ImageBackground,
   Dimensions,
   LayoutAnimation,
@@ -80,11 +79,25 @@ export default class SignInScreen extends React.Component {
         <ImageBackground source={{ uri: BG_IMAGE }} style={styles.bgImage}>
           <View style={styles.loginView}>
             <View style={styles.loginTitle}>
-              <View style={{ flexDirection: 'row' }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
                 <Image
                   style={{ width: 200, height: 50 }}
                   source={require('../images/Arup-logo.png')}
                 />
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: 18
+                  }}
+                >
+                  HAS TAPin
+                </Text>
               </View>
             </View>
             <View style={styles.loginInput}>
@@ -213,7 +226,6 @@ const styles = StyleSheet.create({
   },
   loginTitle: {
     flex: 1,
-    justifyContent: 'flex-start',
     alignItems: 'center',
     // backgroundColor: 'yellow',
     justifyContent: 'center',

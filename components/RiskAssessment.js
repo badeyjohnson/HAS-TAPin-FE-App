@@ -14,41 +14,33 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class JobsScreen extends React.Component {
   state = {
-    checkboxes: [],
-    loading: true,
+    loading: true
   };
 
   componentDidMount = () => {
-    const { risksGeneral } = this.props;
-    const checkboxes = risksGeneral.map((option, i) => {
+    this.setState({ loading: false });
+  };
+
+  render() {
+    const { loading } = this.state;
+    const {
+      risksGeneral,
+      disabled,
+      onChangeSelection,
+      onLevelChanged,
+      risksUpdates,
+      updateRisks
+    } = this.props;
+
+    const inputs = risksGeneral.map(option => {
       return {
-        id: i,
+        id: option.question_id,
         key: option.question,
         value: option.answer,
         risk: option.risk,
         mitigate: option.mitigation_Measures
       };
     });
-    this.setState({ checkboxes, loading: false });
-  };
-
-  onCheckChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].value = val;
-    this.setState(checkboxes);
-  }
-
-  onLevelChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].risk = val;
-    this.setState(checkboxes);
-  }
-
-  render() {
-    const { checkboxes, loading } = this.state;
-    const { disabled } = this.props;
     const options = [
       {
         label: 'Yes',
@@ -94,10 +86,10 @@ export default class JobsScreen extends React.Component {
               </Titlebar>
             </Container>
             <ScrollView>
-              {checkboxes.map((item, key) => {
+              {inputs.map((item, i) => {
                 return (
-                  <View key={`view ${key}`} style={styles.container}>
-                    <Name key={`text ${key}`}>{item.key}</Name>
+                  <View key={`view ${i}`} style={styles.container}>
+                    <Name key={`text ${i}`}>{item.key}</Name>
                     <RadioForm
                       radio_props={options}
                       initial={options.findIndex(
@@ -108,7 +100,7 @@ export default class JobsScreen extends React.Component {
                       buttonColor={'#394385'}
                       selectedButtonColor={'#394385'}
                       onPress={itemValue =>
-                        this.onCheckChanged(itemValue, item.id)
+                        onChangeSelection(itemValue, item.id)
                       }
                       disabled={disabled}
                     />
@@ -116,14 +108,15 @@ export default class JobsScreen extends React.Component {
                       <Content>
                         <Caption>Mitigation Measures: </Caption>
                         <TextInput
+                          onChangeText={input => updateRisks(input, item.id)}
                           multiline={true}
-                          editable={disabled}
+                          editable={this.props.disabled}
+                          value={risksUpdates[item.id].mitigate}
+                          returnKeyType={'done'}
+                          keyboardType={'default'}
+                          maxLength={40}
                           style={styles.mitigate}
-                          value={
-                            item.mitigate
-                              ? item.mitigate
-                              : 'N/A'
-                          }
+                          placeholder={item.mitigate ? item.mitigate : 'N/A'}
                         />
                         <Text>{'\n'}</Text>
                         <Caption>Residual Risk Level: </Caption>
@@ -141,7 +134,7 @@ export default class JobsScreen extends React.Component {
                           buttonColor={'#394385'}
                           selectedButtonColor={'#394385'}
                           onPress={itemValue =>
-                            this.onLevelChanged(itemValue, item.id)
+                            onLevelChanged(itemValue, item.id)
                           }
                           disabled={disabled}
                         />

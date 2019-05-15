@@ -13,35 +13,28 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default class JobsScreen extends React.Component {
   state = {
-    checkboxes: [],
-    loading: true,
+    loading: true
   };
 
   componentDidMount = () => {
-    const { workingHours } = this.props;
-    const checkboxes = workingHours.map((option, i) => {
-      return { id: i, key: option.question, value: option.multi_option };
-    });
-    this.setState({ checkboxes, loading: false });
+    this.setState({ loading: false });
   };
 
-  onCheckChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].value = val;
-    this.setState(checkboxes);
-  }
-
-  onLevelChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].risk = val;
-    this.setState(checkboxes);
-  }
-
   render() {
-    const { checkboxes, loading } = this.state;
-    const { disabled } = this.props;
+    const { loading } = this.state;
+    const {
+      disabled,
+      workingHoursUpdates,
+      updateChangesWorkInfo,
+      workingHours
+    } = this.props;
+    const inputs = workingHours.map((option, i) => {
+      return {
+        id: option.question_id,
+        key: option.question,
+        value: option.multi_option
+      };
+    });
     return (
       <React.Fragment>
         {loading ? (
@@ -58,16 +51,26 @@ export default class JobsScreen extends React.Component {
               </Titlebar>
             </Container>
             <ScrollView>
-              {checkboxes.map((item, key) => {
+              {inputs.map((item, i) => {
                 return (
-                  <View key={`view ${key}`} style={styles.container}>
-                    <Name key={`text ${key}`}>{item.key}</Name>
+                  <View key={`view ${i}`} style={styles.container}>
+                    <Name key={`text ${i}`}>{item.key}</Name>
                     <Content>
                       <TextInput
+                        onChangeText={input =>
+                          updateChangesWorkInfo(input, item.id)
+                        }
                         multiline={true}
                         editable={disabled}
                         style={styles.mitigate}
-                        value={item.value ? item.value :'N/A'}
+                        placeholder={item.value ? item.value : 'N/A'}
+                        containerStyle={{ marginVertical: 10 }}
+                        keyboardAppearance={'light'}
+                        value={workingHoursUpdates[item.id]}
+                        returnKeyType={'done'}
+                        editable={this.props.disabled}
+                        keyboardType={'default'}
+                        maxLength={40}
                       />
                     </Content>
                     <Text>{'\n'}</Text>
