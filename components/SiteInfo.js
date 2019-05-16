@@ -6,7 +6,8 @@ import {
   View,
   StyleSheet,
   TextInput,
-  ActivityIndicator
+  ActivityIndicator,
+  KeyboardAvoidingView
 } from 'react-native';
 import styled from 'styled-components';
 import { Input, Button, Icon } from 'react-native-elements';
@@ -60,31 +61,37 @@ export default class JobsScreen extends React.Component {
               </Titlebar>
             </Container>
             <ScrollView>
-              {inputs.map((item, i) => {
-                return (
-                  <View key={`view ${i}`} style={styles.container}>
-                    <Name key={`text ${i}`}>{item.key}</Name>
-                    <Content>
-                      <TextInput
-                        onChangeText={input =>
-                          updateChangesSiteInfo(input, item.id)
-                        }
-                        multiline={true}
-                        placeholder={item.value ? item.value : 'N/A'}
-                        containerStyle={{ marginVertical: 10 }}
-                        style={styles.mitigate}
-                        keyboardAppearance={'light'}
-                        editable={!disabled}
-                        value={siteInfoUpdates[item.id]}
-                        returnKeyType={'done'}
-                        keyboardType={'default'}
-                        maxLength={40}
-                      />
-                    </Content>
-                    <Text>{'\n'}</Text>
-                  </View>
-                );
-              })}
+              <KeyboardAvoidingView
+                behavior={'position'}
+                keyboardVerticalOffset={-100}
+                enabled
+              >
+                {inputs.map((item, i) => {
+                  return (
+                    <View key={`view ${i}`} style={styles.container}>
+                      <Name key={`text ${i}`}>{item.key}</Name>
+                      <Content>
+                        <TextInput
+                          onChangeText={input =>
+                            updateChangesSiteInfo(input, item.id)
+                          }
+                          multiline={true}
+                          placeholder={item.value ? item.value : 'N/A'}
+                          containerStyle={{ marginVertical: 10 }}
+                          style={styles.mitigate}
+                          keyboardAppearance={'light'}
+                          editable={!disabled}
+                          value={siteInfoUpdates[item.id]}
+                          returnKeyType={'done'}
+                          keyboardType={'default'}
+                          maxLength={40}
+                        />
+                      </Content>
+                      <Text>{'\n'}</Text>
+                    </View>
+                  );
+                })}
+              </KeyboardAvoidingView>
             </ScrollView>
           </React.Fragment>
         )}

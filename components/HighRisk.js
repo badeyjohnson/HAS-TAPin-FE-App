@@ -4,7 +4,8 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  View
 } from 'react-native';
 import styled from 'styled-components';
 

@@ -5,7 +5,8 @@ import {
   ScrollView,
   Switch,
   View,
-  StyleSheet, ActivityIndicator
+  StyleSheet,
+  ActivityIndicator
 } from 'react-native';
 import styled from 'styled-components';
 
@@ -68,7 +69,8 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignContent: 'center'
-  }, loader: {
+  },
+  loader: {
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',

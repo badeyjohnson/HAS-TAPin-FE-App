@@ -1,5 +1,11 @@
 import React from 'react';
-import { Text, Dimensions, ActivityIndicator } from 'react-native';
+import {
+  Text,
+  Dimensions,
+  ActivityIndicator,
+  StyleSheet,
+  View
+} from 'react-native';
 import ListView from '../components/ListView';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import JobContent from '../components/JobContentCard';
@@ -24,7 +30,7 @@ export default class JobsScreen extends React.Component {
 
   componentDidMount = async () => {
     const { navigation } = this.props;
-    const jobNo = navigation.state.params.title
+    const jobNo = navigation.state.params.title;
     const jobDetails = await fetchJob(jobNo);
     const sites = await fetchSitesByJob(jobNo);
     const siteDetails = {};

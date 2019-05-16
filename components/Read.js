@@ -5,7 +5,9 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
-  Image, ActivityIndicator
+  Image,
+  ActivityIndicator,
+  View
 } from 'react-native';
 import styled from 'styled-components';
 import { Input, Button, Icon } from 'react-native-elements';
@@ -37,11 +39,11 @@ export default class JobsScreen extends React.Component {
     } = this.props;
 
     const { loading } = this.state;
-    console.log(additionalInfoUpdate)
+    console.log(additionalInfoUpdate);
     return (
       <React.Fragment>
         {loading ? (
-            <View style={styles.loader}>
+          <View style={styles.loader}>
             <ActivityIndicator size="large" color="#9a9ce8" />
           </View>
         ) : (
@@ -173,7 +175,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     width: SCREEN_WIDTH - 50
-  }, loader: {
+  },
+  loader: {
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',

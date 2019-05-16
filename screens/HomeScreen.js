@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  KeyboardAvoidingView
 } from 'react-native';
 import {
   Overlay,
@@ -97,72 +98,74 @@ export default class HomeScreen extends React.Component {
             navigation={this.props.navigation}
           />
         </View>
-        <Overlay
-          isVisible={this.state.addJob}
-          overlayBackgroundColor="white"
-          width={300}
-          height={400}
-          overlayStyle={styles.modal}
-        >
-          <React.Fragment>
-            <Text h4>Find a job</Text>
-            <Text>{`\n`}</Text>
-            <Input
-              leftIcon={
-                <Icon
-                  name="tasks"
-                  type="font-awesome"
-                  color="black"
-                  size={25}
+          <KeyboardAvoidingView behavior="padding">
+          <Overlay
+            isVisible={this.state.addJob}
+            overlayBackgroundColor="white"
+            width={300}
+            height={400}
+            overlayStyle={styles.modal}
+          >
+            <React.Fragment>
+              <Text h4>Find a job</Text>
+              <Text>{`\n`}</Text>
+              <Input
+                leftIcon={
+                  <Icon
+                    name="tasks"
+                    type="font-awesome"
+                    color="black"
+                    size={25}
+                  />
+                }
+                containerStyle={{ marginVertical: 10 }}
+                onChangeText={jobNumber => this.setState({ jobNumber })}
+                value={jobNumber}
+                inputStyle={{ marginLeft: 10, color: 'black' }}
+                keyboardAppearance="light"
+                placeholder="Job Number"
+                autoFocus={false}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="numeric"
+                returnKeyType="done"
+                blurOnSubmit={true}
+                placeholderTextColor="black"
+                errorStyle={{
+                  textAlign: 'center',
+                  fontSize: 12,
+                  color: 'black',
+                  fontWeight: 'bold'
+                }}
+                errorMessage={foundJob ? null : 'Job No. Not Found'}
+              />
+              <Text>{`\n`}</Text>
+              <View style={styles.buttons}>
+                <Button
+                  title="Submit"
+                  onPress={this.handleAddJobSubmit}
+                  buttonStyle={{
+                    backgroundColor: '#394385',
+                    borderWidth: 2,
+                    borderColor: '#394385'
+                  }}
+                  titleStyle={{ fontWeight: 'bold' }}
                 />
-              }
-              containerStyle={{ marginVertical: 10 }}
-              onChangeText={jobNumber => this.setState({ jobNumber })}
-              value={jobNumber}
-              inputStyle={{ marginLeft: 10, color: 'black' }}
-              keyboardAppearance="light"
-              placeholder="Job Number"
-              autoFocus={false}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="numeric"
-              returnKeyType="done"
-              blurOnSubmit={true}
-              placeholderTextColor="black"
-              errorStyle={{
-                textAlign: 'center',
-                fontSize: 12,
-                color: 'black',
-                fontWeight: 'bold'
-              }}
-              errorMessage={foundJob ? null : 'Job No. Not Found'}
-            />
-            <Text>{`\n`}</Text>
-            <View style={styles.buttons}>
-              <Button
-                title="Submit"
-                onPress={this.handleAddJobSubmit}
-                buttonStyle={{
-                  backgroundColor: '#394385',
-                  borderWidth: 2,
-                  borderColor: '#394385'
-                }}
-                titleStyle={{ fontWeight: 'bold' }}
-              />
-              <Button
-                buttonStyle={{
-                  backgroundColor: 'transparent',
-                  borderWidth: 2,
-                  borderColor: '#394385'
-                }}
-                type="outline"
-                title="Cancel"
-                titleStyle={{ fontWeight: 'bold', color: 'black' }}
-                onPress={() => this.setState({ addJob: false })}
-              />
-            </View>
-          </React.Fragment>
-        </Overlay>
+                <Button
+                  buttonStyle={{
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderColor: '#394385'
+                  }}
+                  type="outline"
+                  title="Cancel"
+                  titleStyle={{ fontWeight: 'bold', color: 'black' }}
+                  onPress={() => this.setState({ addJob: false })}
+                />
+              </View>
+            </React.Fragment>
+          </Overlay>
+        </KeyboardAvoidingView>
       </React.Fragment>
     );
   }

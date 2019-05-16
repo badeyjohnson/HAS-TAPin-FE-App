@@ -75,7 +75,7 @@ export default class SignInScreen extends React.Component {
       password
     } = this.state;
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <ImageBackground source={{ uri: BG_IMAGE }} style={styles.bgImage}>
           <View style={styles.loginView}>
             <View style={styles.loginTitle}>
@@ -198,7 +198,7 @@ export default class SignInScreen extends React.Component {
             />
           </View>
         </ImageBackground>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

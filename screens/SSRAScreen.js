@@ -1,5 +1,12 @@
 import React from 'react';
-import { Dimensions, View, Text, ActivityIndicator } from 'react-native';
+import {
+  Dimensions,
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  KeyboardAvoidingView
+} from 'react-native';
 import PPE from '../components/PPE';
 import Risks from '../components/RiskAssessment';
 import WorkingHours from '../components/WorkingHours';
@@ -330,7 +337,9 @@ export default class SSRAScreen extends React.Component {
               itemWidth={SCREEN_WIDTH}
               onSnapToItem={index => this.setState({ activeSlide: index })}
               renderItem={({ item, index }) => (
-                <View
+                <KeyboardAvoidingView
+                  behavior="padding"
+                  enabled
                   style={{
                     flex: 1,
                     alignItems: 'center',
@@ -338,7 +347,7 @@ export default class SSRAScreen extends React.Component {
                   }}
                 >
                   {item}
-                </View>
+                </KeyboardAvoidingView>
               )}
             />
             {this.pagination}
