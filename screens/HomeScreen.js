@@ -5,7 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   Dimensions,
-  FlatList
+  FlatList,
+  ActivityIndicator,
+  KeyboardAvoidingView
 } from 'react-native';
 import {
   Overlay,
@@ -36,6 +38,7 @@ export default class HomeScreen extends React.Component {
     };
   };
   state = {
+    loading: true,
     jobNumber: '',
     foundJob: true,
     addJob: false,
@@ -50,7 +53,7 @@ export default class HomeScreen extends React.Component {
     const jobs = returned.map(job => {
       return { jNum: job.job_no, jName: job.job_name };
     });
-    this.setState({ jobs });
+    this.setState({ jobs, loading: false });
   };
   handleAddJob = () => {
     this.setState({ addJob: true });
@@ -76,9 +79,13 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { foundJob, jobNumber } = this.state;
+    const { foundJob, jobNumber, loading } = this.state;
     const email = navigation.getParam('email', '');
-    return (
+    return loading ? (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#9a9ce8" />
+      </View>
+    ) : (
       <React.Fragment>
         <Titlebar>
           <Avatar source={require('../images/avatar.png')} />
@@ -91,72 +98,74 @@ export default class HomeScreen extends React.Component {
             navigation={this.props.navigation}
           />
         </View>
-        <Overlay
-          isVisible={this.state.addJob}
-          overlayBackgroundColor="white"
-          width={300}
-          height={400}
-          overlayStyle={styles.modal}
-        >
-          <React.Fragment>
-            <Text h4>Find a job</Text>
-            <Text>{`\n`}</Text>
-            <Input
-              leftIcon={
-                <Icon
-                  name="tasks"
-                  type="font-awesome"
-                  color="black"
-                  size={25}
+          <KeyboardAvoidingView behavior="padding">
+          <Overlay
+            isVisible={this.state.addJob}
+            overlayBackgroundColor="white"
+            width={300}
+            height={400}
+            overlayStyle={styles.modal}
+          >
+            <React.Fragment>
+              <Text h4>Find a job</Text>
+              <Text>{`\n`}</Text>
+              <Input
+                leftIcon={
+                  <Icon
+                    name="tasks"
+                    type="font-awesome"
+                    color="black"
+                    size={25}
+                  />
+                }
+                containerStyle={{ marginVertical: 10 }}
+                onChangeText={jobNumber => this.setState({ jobNumber })}
+                value={jobNumber}
+                inputStyle={{ marginLeft: 10, color: 'black' }}
+                keyboardAppearance="light"
+                placeholder="Job Number"
+                autoFocus={false}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="numeric"
+                returnKeyType="done"
+                blurOnSubmit={true}
+                placeholderTextColor="black"
+                errorStyle={{
+                  textAlign: 'center',
+                  fontSize: 12,
+                  color: 'black',
+                  fontWeight: 'bold'
+                }}
+                errorMessage={foundJob ? null : 'Job No. Not Found'}
+              />
+              <Text>{`\n`}</Text>
+              <View style={styles.buttons}>
+                <Button
+                  title="Submit"
+                  onPress={this.handleAddJobSubmit}
+                  buttonStyle={{
+                    backgroundColor: '#394385',
+                    borderWidth: 2,
+                    borderColor: '#394385'
+                  }}
+                  titleStyle={{ fontWeight: 'bold' }}
                 />
-              }
-              containerStyle={{ marginVertical: 10 }}
-              onChangeText={jobNumber => this.setState({ jobNumber })}
-              value={jobNumber}
-              inputStyle={{ marginLeft: 10, color: 'black' }}
-              keyboardAppearance="light"
-              placeholder="Job Number"
-              autoFocus={false}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="numeric"
-              returnKeyType="done"
-              blurOnSubmit={true}
-              placeholderTextColor="black"
-              errorStyle={{
-                textAlign: 'center',
-                fontSize: 12,
-                color: 'black',
-                fontWeight: 'bold'
-              }}
-              errorMessage={foundJob ? null : 'Job No. Not Found'}
-            />
-            <Text>{`\n`}</Text>
-            <View style={styles.buttons}>
-              <Button
-                title="Submit"
-                onPress={this.handleAddJobSubmit}
-                buttonStyle={{
-                  backgroundColor: '#394385',
-                  borderWidth: 2,
-                  borderColor: '#394385'
-                }}
-                titleStyle={{ fontWeight: 'bold' }}
-              />
-              <Button
-                buttonStyle={{
-                  backgroundColor: 'transparent',
-                  borderWidth: 2,
-                  borderColor: '#394385'
-                }}
-                type="outline"
-                title="Cancel"
-                titleStyle={{ fontWeight: 'bold', color: 'black' }}
-                onPress={() => this.setState({ addJob: false })}
-              />
-            </View>
-          </React.Fragment>
-        </Overlay>
+                <Button
+                  buttonStyle={{
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderColor: '#394385'
+                  }}
+                  type="outline"
+                  title="Cancel"
+                  titleStyle={{ fontWeight: 'bold', color: 'black' }}
+                  onPress={() => this.setState({ addJob: false })}
+                />
+              </View>
+            </React.Fragment>
+          </Overlay>
+        </KeyboardAvoidingView>
       </React.Fragment>
     );
   }
@@ -186,6 +195,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignContent: 'space-around',
+    width: SCREEN_WIDTH
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
     width: SCREEN_WIDTH
   }
 });

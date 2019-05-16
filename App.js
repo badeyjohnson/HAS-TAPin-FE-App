@@ -5,7 +5,6 @@ import HomeScreen from './screens/HomeScreen';
 import JobScreen from './screens/JobScreen';
 import SSRAScreen from './screens/SSRAScreen';
 import MapScreen from './screens/MapScreen';
-import SubmitScreen from './screens/SubmitScreen';
 
 const RootStack = createStackNavigator(
   {
@@ -14,7 +13,6 @@ const RootStack = createStackNavigator(
     Job: JobScreen,
     SSRA: SSRAScreen,
     Map: MapScreen,
-    Submit: SubmitScreen
   },
   {
     initialRouteName: 'SignIn',

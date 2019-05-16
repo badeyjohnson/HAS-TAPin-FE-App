@@ -1,5 +1,11 @@
 import React from 'react';
-import { Text, Dimensions } from 'react-native';
+import {
+  Text,
+  Dimensions,
+  ActivityIndicator,
+  StyleSheet,
+  View
+} from 'react-native';
 import ListView from '../components/ListView';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import JobContent from '../components/JobContentCard';
@@ -11,7 +17,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 export default class JobsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: navigation.state.params
+      headerTitle: navigation.state.params.title
     };
   };
 
@@ -24,7 +30,7 @@ export default class JobsScreen extends React.Component {
 
   componentDidMount = async () => {
     const { navigation } = this.props;
-    const jobNo = navigation.state.params;
+    const jobNo = navigation.state.params.title;
     const jobDetails = await fetchJob(jobNo);
     const sites = await fetchSitesByJob(jobNo);
     const siteDetails = {};
@@ -59,11 +65,12 @@ export default class JobsScreen extends React.Component {
   }
   render() {
     const { jobDetails, siteDetails, loading } = this.state;
-    console.log(siteDetails);
     return (
       <React.Fragment>
         {loading ? (
-          <Text>Loading </Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <JobContent jobDetails={jobDetails} />
@@ -118,3 +125,14 @@ const Name = styled.Text`
   color: #3c4560;
   font-weight: bold;
 `;
+
+const styles = StyleSheet.create({
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
+  }
+});

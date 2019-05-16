@@ -5,7 +5,8 @@ import {
   ScrollView,
   Switch,
   View,
-  StyleSheet
+  StyleSheet,
+  ActivityIndicator
 } from 'react-native';
 import styled from 'styled-components';
 
@@ -26,7 +27,9 @@ export default class JobsScreen extends React.Component {
     return (
       <React.Fragment>
         {loading ? (
-          <Text>loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <Container>
@@ -43,7 +46,7 @@ export default class JobsScreen extends React.Component {
                       key={`switch ${key}`}
                       value={item.checked}
                       onValueChange={() => onCheckChanged(item.id)}
-                      disabled={false}
+                      disabled={disabled}
                     />
                     <Text>{'    '}</Text>
                     <Text key={`text ${key}`}>{item.key}</Text>
@@ -66,6 +69,14 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignContent: 'center'
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
   }
 });
 

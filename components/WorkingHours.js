@@ -5,7 +5,9 @@ import {
   ScrollView,
   View,
   StyleSheet,
-  TextInput
+  TextInput,
+  ActivityIndicator,
+  KeyboardAvoidingView
 } from 'react-native';
 import styled from 'styled-components';
 
@@ -38,7 +40,9 @@ export default class JobsScreen extends React.Component {
     return (
       <React.Fragment>
         {loading ? (
-          <Text>loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <Container>
@@ -51,32 +55,37 @@ export default class JobsScreen extends React.Component {
               </Titlebar>
             </Container>
             <ScrollView>
-              {inputs.map((item, i) => {
-                return (
-                  <View key={`view ${i}`} style={styles.container}>
-                    <Name key={`text ${i}`}>{item.key}</Name>
-                    <Content>
-                      <TextInput
-                        onChangeText={input =>
-                          updateChangesWorkInfo(input, item.id)
-                        }
-                        multiline={true}
-                        editable={disabled}
-                        style={styles.mitigate}
-                        placeholder={item.value ? item.value : 'N/A'}
-                        containerStyle={{ marginVertical: 10 }}
-                        keyboardAppearance={'light'}
-                        value={workingHoursUpdates[item.id]}
-                        returnKeyType={'done'}
-                        editable={this.props.disabled}
-                        keyboardType={'default'}
-                        maxLength={40}
-                      />
-                    </Content>
-                    <Text>{'\n'}</Text>
-                  </View>
-                );
-              })}
+              <KeyboardAvoidingView
+                behavior={'position'}
+                keyboardVerticalOffset={-100}
+                enabled
+              >
+                {inputs.map((item, i) => {
+                  return (
+                    <View key={`view ${i}`} style={styles.container}>
+                      <Name key={`text ${i}`}>{item.key}</Name>
+                      <Content>
+                        <TextInput
+                          onChangeText={input =>
+                            updateChangesWorkInfo(input, item.id)
+                          }
+                          multiline={true}
+                          editable={!disabled}
+                          style={styles.mitigate}
+                          placeholder={item.value ? item.value : 'N/A'}
+                          containerStyle={{ marginVertical: 10 }}
+                          keyboardAppearance={'light'}
+                          value={workingHoursUpdates[item.id]}
+                          returnKeyType={'done'}
+                          keyboardType={'default'}
+                          maxLength={40}
+                        />
+                      </Content>
+                      <Text>{'\n'}</Text>
+                    </View>
+                  );
+                })}
+              </KeyboardAvoidingView>
             </ScrollView>
           </React.Fragment>
         )}
@@ -108,6 +117,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     width: SCREEN_WIDTH - 50
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
   }
 });
 
@@ -125,7 +142,7 @@ const Container = styled.View`
 `;
 
 const Titlebar = styled.View`
-  width: 100%;
+  width: 90%;
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 5px;
@@ -137,7 +154,6 @@ const Titlebar = styled.View`
 
 const Content = styled.View`
   padding-bottom: 10px;
-  flex-direction: column;
   align-items: center;
   align-content: center;
   justify-content: center;

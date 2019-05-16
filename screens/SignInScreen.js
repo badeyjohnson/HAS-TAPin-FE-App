@@ -75,7 +75,7 @@ export default class SignInScreen extends React.Component {
       password
     } = this.state;
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <ImageBackground source={{ uri: BG_IMAGE }} style={styles.bgImage}>
           <View style={styles.loginView}>
             <View style={styles.loginTitle}>
@@ -198,7 +198,7 @@ export default class SignInScreen extends React.Component {
             />
           </View>
         </ImageBackground>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -219,15 +219,12 @@ const styles = StyleSheet.create({
   loginView: {
     flex: 1,
     marginBottom: 125,
-    // backgroundColor: 'blue',
     width: 250
-    // height: 400,
-    // justifyContent: 'flex-start',
   },
   loginTitle: {
     flex: 1,
     alignItems: 'center',
-    // backgroundColor: 'yellow',
+
     justifyContent: 'center',
     width: 250,
     height: 300,
@@ -237,5 +234,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start'
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
   }
 });

@@ -4,7 +4,14 @@ import { TouchableOpacity } from 'react-native';
 
 const Card = ({ title, description, navigation }) => (
   <Container>
-    <TouchableOpacity onPress={() => navigation.navigate('Job', `${title}`)}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('Job', {
+          title: `${title}`,
+          email: navigation.state.params.email
+        })
+      }
+    >
       <React.Fragment>
         <Cover>
           <Image source={require('../images/building.jpg')} />

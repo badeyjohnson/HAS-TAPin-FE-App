@@ -19,7 +19,7 @@ const ListView = ({ itemList, navigation, parent, jobDetails }) => (
   <View style={styles.container}>
     {parent === 'Job' ? (
       <FlatList
-        data={itemList}
+        data={itemList.sort((a, b) => a.created_at < b.created_at)}
         renderItem={({ item }) => (
           <RiskCard
             item={item}

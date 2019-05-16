@@ -5,7 +5,7 @@ import {
   ScrollView,
   View,
   StyleSheet,
-  TextInput
+  TextInput, ActivityIndicator
 } from 'react-native';
 import styled from 'styled-components';
 import RadioForm from 'react-native-simple-radio-button';
@@ -76,7 +76,9 @@ export default class JobsScreen extends React.Component {
     return (
       <React.Fragment>
         {loading ? (
-          <Text>loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <Container>
@@ -104,13 +106,15 @@ export default class JobsScreen extends React.Component {
                       }
                       disabled={disabled}
                     />
-                    {item.value === 'Y' && (
+                    {(item.value === 'Y' &&
+                      risksUpdates[item.id].answer === '') ||
+                    risksUpdates[item.id].answer === 'Y' ? (
                       <Content>
                         <Caption>Mitigation Measures: </Caption>
                         <TextInput
                           onChangeText={input => updateRisks(input, item.id)}
                           multiline={true}
-                          editable={this.props.disabled}
+                          editable={!disabled}
                           value={risksUpdates[item.id].mitigate}
                           returnKeyType={'done'}
                           keyboardType={'default'}
@@ -139,7 +143,7 @@ export default class JobsScreen extends React.Component {
                           disabled={disabled}
                         />
                       </Content>
-                    )}
+                    ) : null}
                     <Text>{'\n'}</Text>
                   </View>
                 );
@@ -175,6 +179,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     width: SCREEN_WIDTH - 50
+  }, loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
   }
 });
 

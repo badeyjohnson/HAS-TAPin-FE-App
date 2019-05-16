@@ -5,7 +5,9 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
-  Image
+  Image,
+  ActivityIndicator,
+  View
 } from 'react-native';
 import styled from 'styled-components';
 import { Input, Button, Icon } from 'react-native-elements';
@@ -37,17 +39,19 @@ export default class JobsScreen extends React.Component {
     } = this.props;
 
     const { loading } = this.state;
-
+    console.log(additionalInfoUpdate);
     return (
       <React.Fragment>
         {loading ? (
-          <Text>loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <Container>
               <Titlebar>
                 <Image
-                  style={{ width: 150, height: 150 }}
+                  style={{ width: 120, height: 140 }}
                   source={require('../images/stop.jpg')}
                 />
               </Titlebar>
@@ -76,7 +80,7 @@ export default class JobsScreen extends React.Component {
                   <TextInput
                     multiline={true}
                     onChangeText={input => updateAdditionalInfo(input)}
-                    editable={disabled}
+                    editable={!disabled}
                     style={styles.mitigate}
                     keyboardAppearance={'light'}
                     value={additionalInfoUpdate}
@@ -171,24 +175,32 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     width: SCREEN_WIDTH - 50
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
   }
 });
 
 const Container = styled.View`
   background: #fff;
   height: 160px;
-  width: ${SCREEN_WIDTH - 50};
+  width: ${SCREEN_WIDTH - 75};
   border-radius: 14px;
   margin: 10px;
   margin-top: 10px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  align-items: flex-start;
-  align-content: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
 `;
 
 const Titlebar = styled.View`
-  width: 100%;
+  width: 80%;
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 5px;
@@ -204,12 +216,6 @@ const Content = styled.View`
   align-items: center;
   align-content: center;
   justify-content: center;
-`;
-
-const Title = styled.Text`
-  color: #3c4560;
-  font-size: 20px;
-  font-weight: 600;
 `;
 
 const Caption = styled.Text`

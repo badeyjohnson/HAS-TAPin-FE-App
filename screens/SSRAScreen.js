@@ -1,5 +1,12 @@
 import React from 'react';
-import { Dimensions, View, Text } from 'react-native';
+import {
+  Dimensions,
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  KeyboardAvoidingView
+} from 'react-native';
 import PPE from '../components/PPE';
 import Risks from '../components/RiskAssessment';
 import WorkingHours from '../components/WorkingHours';
@@ -7,6 +14,7 @@ import SiteInfo from '../components/SiteInfo';
 import HighRisk from '../components/HighRisk';
 import Read from '../components/Read';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { answerConvertor, riskLevelConvertor } from '../utils/utils';
 import { fetchRiskAssessment, updateRiskAssessment } from '../api';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -60,7 +68,11 @@ export default class SSRAScreen extends React.Component {
     );
     const risksUpdates = { ...this.state.risksUpdates };
     risksGeneral.map(info => {
-      risksUpdates[`${info.question_id}`] = { mitigate: '' };
+      risksUpdates[`${info.question_id}`] = {
+        mitigate: '',
+        answer: '',
+        risk: ''
+      };
     });
     const ppe = sorted.filter(question => question.question_id === 34);
     const additionalInfo = sorted.filter(
@@ -159,28 +171,97 @@ export default class SSRAScreen extends React.Component {
     checkboxes[index].checked = !checkboxes[index].checked;
     this.setState(checkboxes);
   };
-  onChangeSelection(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].value = val;
-    this.setState(checkboxes);
-  }
-
-  onLevelChanged(val, id) {
-    const { checkboxes } = this.state;
-    const index = checkboxes.findIndex(x => x.id === id);
-    checkboxes[index].risk = val;
-    this.setState(checkboxes);
-  }
-
+  onChangeSelection = (val, id) => {
+    const risksUpdates = { ...this.state.risksUpdates };
+    risksUpdates[id]['answer'] = val;
+    this.setState(risksUpdates);
+  };
+  onLevelChanged = (val, id) => {
+    const risksUpdates = { ...this.state.risksUpdates };
+    risksUpdates[id]['risk'] = val;
+    this.setState(risksUpdates);
+  };
   submitChanges = () => {
     const {
       navigation: {
         state: {
-          params: { site_id }
+          params: { site_id, email }
         }
       }
     } = this.props;
+    const {
+      additionalInfoUpdate,
+      additionalInfo,
+      siteInfo,
+      siteInfoUpdates,
+      workingHoursUpdates,
+      workingHours,
+      checkboxes,
+      risksGeneral,
+      risksUpdates
+    } = this.state;
+
+    const site = siteInfo.map(info => {
+      return {
+        question_id: info.question_id,
+        multi_option:
+          siteInfoUpdates[info.question_id].length > 0
+            ? siteInfoUpdates[info.question_id]
+            : info.multi_option
+      };
+    });
+    const working = workingHours.map(info => {
+      return {
+        question_id: info.question_id,
+        multi_option:
+          workingHoursUpdates[info.question_id].length > 0
+            ? workingHoursUpdates[info.question_id]
+            : info.multi_option
+      };
+    });
+
+    let ppeUpdate = [];
+    checkboxes.forEach(info => {
+      if (info.checked) ppeUpdate.push(info.key);
+    });
+
+    const risks = risksGeneral.map(info => {
+      return {
+        question_id: info.question_id,
+        risk_level:
+          risksUpdates[info.question_id].risk.length > 0
+            ? riskLevelConvertor(risksUpdates[info.question_id].risk)
+            : riskLevelConvertor(info.risk),
+        answers_options:
+          risksUpdates[info.question_id].answer.length > 0
+            ? answerConvertor(risksUpdates[info.question_id].answer)
+            : answerConvertor(info.answer),
+        mitigation_Measures:
+          risksUpdates[info.question_id].mitigate.length > 0
+            ? risksUpdates[info.question_id].mitigate
+            : info.mitigation_Measures
+      };
+    });
+
+    const addt = {
+      question_id: 35,
+      multi_option:
+        additionalInfoUpdate.length > 0
+          ? additionalInfoUpdate
+          : additionalInfo.multi_option
+    };
+
+    const update = {
+      email,
+      response: [
+        ...site,
+        ...working,
+        ...risks,
+        { question_id: 34, multi_option: JSON.stringify(ppeUpdate) },
+        addt
+      ]
+    };
+
     updateRiskAssessment(site_id, update);
   };
 
@@ -221,6 +302,8 @@ export default class SSRAScreen extends React.Component {
         disabled={disabled}
         updateRisks={this.updateRisks}
         risksUpdates={risksUpdates}
+        onChangeSelection={this.onChangeSelection}
+        onLevelChanged={this.onLevelChanged}
       />,
       <PPE
         ppe={ppe}
@@ -239,11 +322,12 @@ export default class SSRAScreen extends React.Component {
         additionalInfoUpdate={additionalInfoUpdate}
       />
     ];
-    console.log('risksUpdates', risksUpdates);
     return (
       <React.Fragment>
         {loading ? (
-          <Text>Loading...</Text>
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9a9ce8" />
+          </View>
         ) : (
           <React.Fragment>
             <Carousel
@@ -253,7 +337,9 @@ export default class SSRAScreen extends React.Component {
               itemWidth={SCREEN_WIDTH}
               onSnapToItem={index => this.setState({ activeSlide: index })}
               renderItem={({ item, index }) => (
-                <View
+                <KeyboardAvoidingView
+                  behavior="padding"
+                  enabled
                   style={{
                     flex: 1,
                     alignItems: 'center',
@@ -261,7 +347,7 @@ export default class SSRAScreen extends React.Component {
                   }}
                 >
                   {item}
-                </View>
+                </KeyboardAvoidingView>
               )}
             />
             {this.pagination}
@@ -271,3 +357,14 @@ export default class SSRAScreen extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    width: SCREEN_WIDTH
+  }
+});
